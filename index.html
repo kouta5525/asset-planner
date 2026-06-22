@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Asset Manager Pro V7.2</title>
+<title>Asset Manager Pro V7.2.1</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="資産1億円">
@@ -12,14 +12,53 @@
 <style>
 :root{--bg:#0b1020;--bg2:#11182d;--card:#171f38;--card2:#10172a;--line:#28345c;--blue:#4f8ef7;--green:#34d399;--yellow:#f59e0b;--red:#ef4444;--text:#eef3ff;--muted:#94a0bc;--purple:#9b5cff;--cyan:#22d3ee;--radius:22px}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;background:radial-gradient(circle at top,#1d2744 0,#0b1020 34%,#070b16 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;min-height:100vh;padding:16px 12px 88px}.app{max-width:980px;margin:0 auto}.hero{text-align:center;padding:22px 8px 14px}.label{letter-spacing:.22em;color:var(--muted);font-size:12px}.hero h1{margin:10px 0 8px;font-size:clamp(28px,7vw,44px);line-height:1.1}.hero h1 span{color:var(--blue)}.sub{color:var(--muted);font-size:13px}.tabs{position:sticky;top:0;z-index:30;background:rgba(8,12,24,.88);backdrop-filter:blur(14px);display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px 0;margin-bottom:12px}.tab{border:1px solid var(--line);background:#12182c;color:var(--muted);border-radius:18px;padding:13px 6px;font-weight:800;font-size:13px;text-align:center}.tab.active{background:linear-gradient(135deg,#3b82f6,#60a5fa);color:white;box-shadow:0 10px 25px rgba(79,142,247,.25)}.panel{display:none}.panel.active{display:block}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.card{background:linear-gradient(180deg,rgba(27,36,65,.96),rgba(16,23,42,.96));border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:14px;box-shadow:0 12px 40px rgba(0,0,0,.18)}.kpi{min-height:118px;display:flex;flex-direction:column;justify-content:center;text-align:center}.kpi.green{border-color:var(--green)}.kpi.yellow{border-color:var(--yellow)}.kpi.blue{border-color:var(--blue)}.kpi-label{color:var(--muted);font-size:12px;margin-bottom:12px}.kpi-num{font-size:clamp(20px,5vw,34px);font-weight:900;letter-spacing:-.03em}.accent{color:var(--blue)}.greenTxt{color:var(--green)}.yellowTxt{color:var(--yellow)}.redTxt{color:var(--red)}.title{font-size:18px;font-weight:900;margin:0 0 4px}.desc{font-size:12px;color:var(--muted);line-height:1.7;margin:0 0 16px}.row{display:grid;grid-template-columns:1fr 120px;gap:10px;align-items:center;margin:10px 0}.row label{color:var(--muted);font-size:13px}.input,select,textarea{width:100%;background:#0d1428;border:1px solid var(--line);border-radius:14px;color:var(--text);padding:12px;font-size:16px;outline:none}.input:focus,select:focus,textarea:focus{border-color:var(--blue)}button{font:inherit}.btn{width:100%;border:0;background:linear-gradient(135deg,#3b82f6,#60a5fa);color:white;padding:14px 16px;border-radius:16px;font-weight:900}.btn.secondary{background:#121a30;border:1px solid var(--line);color:var(--text)}.btn.green{background:linear-gradient(135deg,#10b981,#34d399)}.btn.red{background:linear-gradient(135deg,#dc2626,#ef4444)}.btn.yellow{background:linear-gradient(135deg,#d97706,#f59e0b)}.mini{padding:10px 12px;border-radius:13px;font-size:13px}.bar{height:12px;background:#202a4c;border-radius:99px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:99px;transition:.3s}.status{display:flex;gap:12px;align-items:center;border-left:5px solid var(--blue)}.statusIcon{width:46px;height:46px;border-radius:16px;background:#0d1428;display:grid;place-items:center;font-size:24px}.chartBox{height:310px}.list{display:flex;flex-direction:column;gap:10px}.item{background:#0d1428;border:1px solid var(--line);border-radius:16px;padding:12px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}.itemMain{font-weight:800}.itemSub{color:var(--muted);font-size:12px;margin-top:4px;line-height:1.5}.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#0d1428;border-radius:99px;padding:7px 10px;color:var(--muted);font-size:12px}.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.seg button{border:1px solid var(--line);background:#0d1428;color:var(--muted);border-radius:14px;padding:12px;font-weight:900}.seg button.active{background:var(--blue);color:white}.assetRow{grid-template-columns:minmax(220px,2.2fr) 110px 88px 92px auto}.assetRow .input{min-width:0}.tableHead{color:var(--muted);font-size:11px;padding:0 6px}.rangeRow{display:flex;gap:12px;align-items:center}.circleBtn{width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#10172a;color:white;font-size:28px;font-weight:900}.range{flex:1;accent-color:var(--blue)}.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(30px);opacity:0;background:var(--green);color:#032016;padding:12px 18px;border-radius:999px;font-weight:900;z-index:99;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%)}.foot{font-size:11px;color:var(--muted);line-height:1.7;padding:12px 2px}@media(max-width:640px){.grid2,.grid3{grid-template-columns:1fr 1fr}.assetRow.tableHead{display:none}.assetRow:not(.tableHead){grid-template-columns:1fr 1fr 1fr 44px;grid-template-areas:"name name name del" "amount rate account del";gap:8px;align-items:stretch}.assetRow:not(.tableHead)>input:nth-child(1){grid-area:name;font-size:16px;padding:14px}.assetRow:not(.tableHead)>input:nth-child(2){grid-area:amount}.assetRow:not(.tableHead)>input:nth-child(3){grid-area:rate}.assetRow:not(.tableHead)>input:nth-child(4){grid-area:account}.assetRow:not(.tableHead)>button{grid-area:del;height:100%;min-height:92px;padding:0}.row{grid-template-columns:1fr 108px}.tabs{grid-template-columns:repeat(4,1fr)}.tab{font-size:12px;padding:12px 4px}.chartBox{height:280px}.card{padding:16px}.hero h1{font-size:32px}}
 
-.asset-label-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px 0 6px;color:#9aa6c0;font-size:12px;font-weight:700}
+.asset-field-labels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px 0 6px;color:#9aa6c0;font-size:12px;font-weight:700}
 .asset-unit-hint{font-size:11px;color:#9aa6c0;margin-top:4px}
 .asset-row input::placeholder{color:#6f7b99}
+
+/* V7.2.1 asset input labels */
+.asset-field-labels{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+  margin:12px 0 6px;
+  color:#aeb8d4;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.02em;
+}
+.asset-field-labels span{
+  display:block;
+  white-space:nowrap;
+}
+.asset-field-unit{
+  font-size:11px;
+  color:#8f9bb8;
+  margin-top:4px;
+  line-height:1.35;
+}
+.asset-name-label{
+  color:#aeb8d4;
+  font-size:12px;
+  font-weight:700;
+  margin:0 0 6px;
+}
+.asset-row input::placeholder{
+  color:#667293;
+}
+@media (max-width: 520px){
+  .asset-field-labels{
+    grid-template-columns:1fr 1fr 1fr;
+    gap:8px;
+    font-size:11px;
+  }
+}
+
 </style>
 </head>
 <body>
 <div class="app">
-<header class="hero"><div class="label">ASSET MANAGER PRO V7.2</div><h1>45歳から<span>1億円</span>を本気で狙う</h1><div class="sub" id="heroSub">600万円・年間240万円・60歳1億円プラン</div></header>
+<header class="hero"><div class="label">ASSET MANAGER PRO V7.2.1</div><h1>45歳から<span>1億円</span>を本気で狙う</h1><div class="sub" id="heroSub">600万円・年間240万円・60歳1億円プラン</div></header>
 <nav class="tabs" id="tabs"><div class="tab active" data-tab="home">ホーム</div><div class="tab" data-tab="assets">資産</div><div class="tab" data-tab="plan">計画</div><div class="tab" data-tab="sim">分析</div><div class="tab" data-tab="actual">実績</div><div class="tab" data-tab="events">イベント</div><div class="tab" data-tab="retire">老後</div><div class="tab" data-tab="save">保存</div></nav>
 
 <section class="panel active" id="panel-home">
@@ -48,7 +87,7 @@
 <section class="panel" id="panel-sim">
  <div class="card"><div class="title">シミュレーション</div><p class="desc">45〜70歳。年次/月次切替、悲観・標準・楽観、暴落ありを比較できます。</p><div class="seg"><button id="viewYear" class="active" onclick="setView('year')">年次</button><button id="viewMonth" onclick="setView('month')">月次</button><button id="viewCrash" onclick="toggleCrash()">暴落OFF</button></div></div>
  <div class="card"><div class="chartBox"><canvas id="mainChart"></canvas></div></div>
- <div class="asset-label-row"><span>保有額（万円）</span><span>期待リターン（年率％）</span><span>口座区分</span></div><div class="grid3"><div class="card kpi"><div class="kpi-label">悲観4%</div><div class="kpi-num" id="simLow">—</div></div><div class="card kpi blue"><div class="kpi-label">標準PF</div><div class="kpi-num accent" id="simBase">—</div></div><div class="card kpi green"><div class="kpi-label">楽観10%</div><div class="kpi-num greenTxt" id="simHigh">—</div></div></div>
+ <div class="asset-field-labels"><span>保有額（万円）</span><span>期待リターン（年率％）</span><span>口座区分</span></div><div class="grid3"><div class="card kpi"><div class="kpi-label">悲観4%</div><div class="kpi-num" id="simLow">—</div></div><div class="card kpi blue"><div class="kpi-label">標準PF</div><div class="kpi-num accent" id="simBase">—</div></div><div class="card kpi green"><div class="kpi-label">楽観10%</div><div class="kpi-num greenTxt" id="simHigh">—</div></div></div>
 </section>
 
 <section class="panel" id="panel-actual">
