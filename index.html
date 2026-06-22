@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Asset Manager Pro V7.5</title>
+<title>Asset Manager Pro V7.5.1</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="資産1億円">
@@ -140,11 +140,23 @@
   .dragHandle{min-height:78px}
 }
 
+
+/* V7.5.1 add asset button touch fix */
+.addAssetBtn{
+  position:relative;
+  z-index:5;
+  width:100%;
+  min-height:64px;
+  touch-action:manipulation;
+  -webkit-user-select:none;
+  user-select:none;
+}
+
 </style>
 </head>
 <body>
 <div class="app">
-<header class="hero"><div class="label">ASSET MANAGER PRO V7.5</div><h1>45歳から<span>1億円</span>を本気で狙う</h1><div class="sub" id="heroSub">600万円・年間240万円・60歳1億円プラン</div></header>
+<header class="hero"><div class="label">ASSET MANAGER PRO V7.5.1</div><h1>45歳から<span>1億円</span>を本気で狙う</h1><div class="sub" id="heroSub">600万円・年間240万円・60歳1億円プラン</div></header>
 <nav class="tabs" id="tabs"><div class="tab active" data-tab="home">ホーム</div><div class="tab" data-tab="assets">資産</div><div class="tab" data-tab="plan">計画</div><div class="tab" data-tab="sim">分析</div><div class="tab" data-tab="actual">実績</div><div class="tab" data-tab="events">イベント</div><div class="tab" data-tab="retire">老後</div><div class="tab" data-tab="save">保存</div></nav>
 
 <section class="panel active" id="panel-home">
@@ -160,7 +172,7 @@
 </section>
 
 <section class="panel" id="panel-assets">
- <div class="card"><div class="title">資産管理</div><p class="desc">新NISA・特定口座・iDeCo・現金などを個別管理。保有額は1円単位で入力できます。☰をドラッグして並び替えできます。</p><div class="item assetRow tableHead"><div>名前</div><div>金額(万)</div><div>年率%</div><div>口座</div><div></div></div><div id="assetList" class="list"></div><button class="btn secondary" onclick="addAsset()">＋ 資産を追加</button></div>
+ <div class="card"><div class="title">資産管理</div><p class="desc">新NISA・特定口座・iDeCo・現金などを個別管理。保有額は1円単位で入力できます。☰をドラッグして並び替えできます。</p><div class="item assetRow tableHead"><div>名前</div><div>金額(万)</div><div>年率%</div><div>口座</div><div></div></div><div id="assetList" class="list"></div><button id="addAssetBtn" type="button" class="btn secondary addAssetBtn">＋ 資産を追加</button></div>
  <div class="grid2"><div class="card kpi"><div class="kpi-label">合計資産</div><div class="kpi-num" id="assetTotal">—</div></div><div class="card kpi"><div class="kpi-label">PF平均リターン</div><div class="kpi-num accent" id="avgReturn">—</div></div></div>
  <div class="card"><div class="title">資産配分</div><div class="chartBox"><canvas id="donut"></canvas></div></div>
 </section>
@@ -258,7 +270,7 @@ function renderHome(){
 }
 function renderAgeBox(){const a=+ageRange.value;ageLabel.textContent=a.toFixed(1)+'歳';const i=idxFromAge(a),tar=targetForIdx(i),act=actualForIdx(i);ageTarget.textContent=yen(tar);ageActual.textContent=act?yen(act)+' / '+pct(act/tar*100):'未記録'}function stepAge(s){ageRange.value=(+ageRange.value)+(s/12);renderAgeBox()}
 ageRange.addEventListener('input',renderAgeBox);
-function renderAssets(){assetList.innerHTML=state.assets.map((a,idx)=>`<div class="item assetCard compactAsset" draggable="true" data-id="${a.id}">
+function renderAssets(){state.assets=Array.isArray(state.assets)?state.assets:[];assetList.innerHTML=state.assets.map((a,idx)=>`<div class="item assetCard compactAsset" draggable="true" data-id="${a.id}">
   <div class="dragHandle" title="ドラッグして並び替え">☰</div>
   <div class="assetNameBox">
     <label>資産名・銘柄名</label>
@@ -282,7 +294,8 @@ function renderAssets(){assetList.innerHTML=state.assets.map((a,idx)=>`<div clas
     </div>
   </div>
   <button class="btn red mini delBtn" onclick="delAsset('${a.id}')">×</button>
-</div>`).join('');assetTotal.textContent=yen(totalAsset());avgReturn.textContent=pct(avgRate());drawDonut();setupAssetDrag()}function updAsset(i,f,v){let a=state.assets.find(x=>x.id===i);if(f==='amountYen')a.amount=parseYenInput(v);else a[f]=(f==='name'||f==='account')?v:+v;save();renderAll()}function delAsset(i){state.assets=state.assets.filter(x=>x.id!==i);save();renderAll()}function addAsset(){state.assets.push({id:id(),name:'新規資産',amount:0,rate:5,account:'特定'});save();renderAll()}
+</div>`).join('');assetTotal.textContent=yen(totalAsset());avgReturn.textContent=pct(avgRate());drawDonut();setupAssetDrag()}function updAsset(i,f,v){let a=state.assets.find(x=>x.id===i);if(f==='amountYen')a.amount=parseYenInput(v);else a[f]=(f==='name'||f==='account')?v:+v;save();renderAll()}function delAsset(i){state.assets=state.assets.filter(x=>x.id!==i);save();renderAll()}function addAsset(){state.assets=Array.isArray(state.assets)?state.assets:[];state.assets.push({id:id(),name:'新規資産',amount:0,rate:5,account:'特定'});save();renderAll();toast('資産を追加しました')}
+function bindAddAssetButton(){const b=document.getElementById('addAssetBtn');if(!b||b.dataset.bound)return;b.dataset.bound='1';b.addEventListener('click',addAsset);b.addEventListener('touchend',e=>{e.preventDefault();addAsset()},{passive:false})}
 
 function moveAssetById(fromId,toId){
   if(!fromId||!toId||fromId===toId)return;
@@ -339,7 +352,7 @@ function drawDonut(){const ctx='donut';makeChart(ctx,'doughnut',{labels:state.as
 function setupPinchZoom(){const canvas=document.getElementById('mainChart');if(!canvas||canvas.dataset.pinchReady)return;canvas.dataset.pinchReady='1';const dist=t=>Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);const midX=t=>(t[0].clientX+t[1].clientX)/2;canvas.addEventListener('touchstart',e=>{if(e.touches.length===2){pinchStart={d:dist(e.touches),x:midX(e.touches)};pinchDone=false}}, {passive:true});canvas.addEventListener('touchmove',e=>{if(!pinchStart||e.touches.length!==2||pinchDone)return;const d=dist(e.touches);if(d-pinchStart.d>35){e.preventDefault();const rect=canvas.getBoundingClientRect();const x=Math.max(0,Math.min(rect.width,pinchStart.x-rect.left));const ratio=x/Math.max(1,rect.width);const age=state.plan.startAge+ratio*(state.plan.endAge-state.plan.startAge);zoomToAge(age);pinchDone=true}}, {passive:false});canvas.addEventListener('touchend',()=>{pinchStart=null;pinchDone=false},{passive:true})}
 function makeChart(id,type,data,extra={}){if(charts[id])charts[id].destroy();const opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a0bc'}},tooltip:{callbacks:{label:c=>`${c.dataset.label||c.label}: ${yen(c.raw)}`}}},scales:type==='doughnut'?{}:{x:{ticks:{color:'#94a0bc',maxTicksLimit:viewMode==='month'?8:12},grid:{color:'#28345c'}},y:{ticks:{color:'#94a0bc',callback:v=>v>=10000?(v/10000).toFixed(1)+'億':Math.round(v/1000)+'千万'},grid:{color:'#28345c'}}},...extra};charts[id]=new Chart(document.getElementById(id),{type,data,options:opts});if(id==='mainChart')setTimeout(setupPinchZoom,50)}
 function downloadJSON(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});dl(blob,'asset-manager-v7-backup.json')}function importJSON(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{state=JSON.parse(r.result);save();toast('復元しました');renderAll()}catch{toast('復元失敗')}};r.readAsText(f)}function downloadCSV(){let rows=['month,asset,contribution'];Object.keys(state.actuals).sort().forEach(k=>rows.push(`${k},${state.actuals[k].asset},${state.actuals[k].contrib||0}`));dl(new Blob([rows.join('\n')],{type:'text/csv'}),'actuals.csv')}function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href)}
-function renderAll(){heroSub.textContent=`現在${yen(totalAsset())} / 月${state.plan.monthly}万円 / ${state.plan.goalAge}歳${yen(state.plan.goal)}目標`;renderHome();renderAssets();renderPlan();drawMain();renderActual();renderEvents();renderRetire();save()}document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.getElementById('panel-'+t.dataset.tab).classList.add('active');setTimeout(()=>Object.values(charts).forEach(c=>c&&c.resize()),80)});renderAll();
+function renderAll(){setTimeout(bindAddAssetButton,0);heroSub.textContent=`現在${yen(totalAsset())} / 月${state.plan.monthly}万円 / ${state.plan.goalAge}歳${yen(state.plan.goal)}目標`;renderHome();renderAssets();renderPlan();drawMain();renderActual();renderEvents();renderRetire();save()}document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.getElementById('panel-'+t.dataset.tab).classList.add('active');setTimeout(()=>Object.values(charts).forEach(c=>c&&c.resize()),80)});renderAll();
 </script>
 </body>
 </html>
