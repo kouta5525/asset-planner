@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Asset Manager Pro V7.5.3 Safe</title>
+<title>Asset Manager Pro V7.5.4 Safe</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="資産1億円">
@@ -95,9 +95,8 @@
 }
 
 
-/* V7.5.3 Safe: compact asset cards, small delete, normal taps */
+/* V7.5.4 Safe: compact asset cards, no global event hijack */
 .assetCardSafe{
-  position:relative;
   display:grid;
   grid-template-columns:1fr 38px;
   grid-template-areas:
@@ -105,13 +104,13 @@
     "fields del";
   gap:8px;
   padding:12px;
-  align-items:center;
+  align-items:start;
 }
 .assetNameSafe{grid-area:name}
 .assetFieldsSafe{
   grid-area:fields;
   display:grid;
-  grid-template-columns:1.15fr .8fr .95fr;
+  grid-template-columns:1.12fr .82fr .95fr;
   gap:8px;
 }
 .assetFieldSafe label,.assetNameSafe label{
@@ -144,23 +143,23 @@
   align-self:start;
 }
 .addAssetBtnSafe{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  width:100%!important;
-  min-height:58px!important;
-  margin-top:12px!important;
-  position:relative!important;
-  z-index:2!important;
-  pointer-events:auto!important;
-  touch-action:manipulation!important;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:58px;
+  margin-top:12px;
+  position:relative;
+  z-index:2;
+  pointer-events:auto;
+  touch-action:manipulation;
 }
 
 </style>
 </head>
 <body>
 <div class="app">
-<header class="hero"><div class="label">ASSET MANAGER PRO V7.5.3 SAFE</div><h1>45歳から<span>1億円</span>を本気で狙う</h1><div class="sub" id="heroSub">600万円・年間240万円・60歳1億円プラン</div></header>
+<header class="hero"><div class="label">ASSET MANAGER PRO V7.5.4 SAFE</div><h1>45歳から<span>1億円</span>を本気で狙う</h1><div class="sub" id="heroSub">600万円・年間240万円・60歳1億円プラン</div></header>
 <nav class="tabs" id="tabs"><div class="tab active" data-tab="home">ホーム</div><div class="tab" data-tab="assets">資産</div><div class="tab" data-tab="plan">計画</div><div class="tab" data-tab="sim">分析</div><div class="tab" data-tab="actual">実績</div><div class="tab" data-tab="events">イベント</div><div class="tab" data-tab="retire">老後</div><div class="tab" data-tab="save">保存</div></nav>
 
 <section class="panel active" id="panel-home">
@@ -176,7 +175,11 @@
 </section>
 
 <section class="panel" id="panel-assets">
- <div class="card"><div class="title">資産管理</div><p class="desc">新NISA・特定口座・iDeCo・現金などを個別管理。保有額は1円単位で入力できます。</p><div class="item assetRow tableHead"><div>名前</div><div>金額(万)</div><div>年率%</div><div>口座</div><div></div></div><div id="assetList" class="list"></div><button class="btn secondary" onclick="addAsset()">＋ 資産を追加</button></div>
+ <div class="card">
+   <div class="title">資産管理</div>
+   <p class="desc">新NISA・特定口座・iDeCo・現金などを個別管理。保有額は1円単位で入力できます。</p>
+   <div id="assetList" class="list"></div>
+ </div>
  <div class="grid2"><div class="card kpi"><div class="kpi-label">合計資産</div><div class="kpi-num" id="assetTotal">—</div></div><div class="card kpi"><div class="kpi-label">PF平均リターン</div><div class="kpi-num accent" id="avgReturn">—</div></div></div>
  <div class="card"><div class="title">資産配分</div><div class="chartBox"><canvas id="donut"></canvas></div></div>
 </section>
@@ -274,30 +277,36 @@ function renderHome(){
 }
 function renderAgeBox(){const a=+ageRange.value;ageLabel.textContent=a.toFixed(1)+'歳';const i=idxFromAge(a),tar=targetForIdx(i),act=actualForIdx(i);ageTarget.textContent=yen(tar);ageActual.textContent=act?yen(act)+' / '+pct(act/tar*100):'未記録'}function stepAge(s){ageRange.value=(+ageRange.value)+(s/12);renderAgeBox()}
 ageRange.addEventListener('input',renderAgeBox);
-function renderAssets(){state.assets=Array.isArray(state.assets)?state.assets:[];assetList.innerHTML=state.assets.map(a=>`<div class="item assetCardSafe">
-  <div class="assetNameSafe">
-    <label>資産名・銘柄名</label>
-    <input class="input" placeholder="例：S&P500 / オルカン" value="${a.name}" onchange="updAsset('${a.id}','name',this.value)">
-  </div>
-  <div class="assetFieldsSafe">
-    <div class="assetFieldSafe">
-      <label>保有額</label>
-      <input class="input" inputmode="numeric" placeholder="例：413,582円" value="${yenInput(a.amount)}" onchange="updAsset('${a.id}','amountYen',this.value);formatYenEl(this)">
-      <div class="unitInside">1円単位</div>
+function renderAssets(){
+  state.assets=Array.isArray(state.assets)?state.assets:[];
+  assetList.innerHTML=state.assets.map(a=>`<div class="item assetCardSafe">
+    <div class="assetNameSafe">
+      <label>資産名・銘柄名</label>
+      <input class="input" placeholder="例：S&P500 / オルカン" value="${a.name}" onchange="updAsset('${a.id}','name',this.value)">
     </div>
-    <div class="assetFieldSafe">
-      <label>期待リターン</label>
-      <input class="input" type="number" step="0.1" placeholder="例：7" value="${a.rate}" onchange="updAsset('${a.id}','rate',this.value)">
-      <div class="unitInside">年率％</div>
+    <div class="assetFieldsSafe">
+      <div class="assetFieldSafe">
+        <label>保有額</label>
+        <input class="input" inputmode="numeric" placeholder="例：413,582円" value="${yenInput(a.amount)}" onchange="updAsset('${a.id}','amountYen',this.value);formatYenEl(this)">
+        <div class="unitInside">1円単位</div>
+      </div>
+      <div class="assetFieldSafe">
+        <label>期待リターン</label>
+        <input class="input" type="number" step="0.1" placeholder="例：7" value="${a.rate}" onchange="updAsset('${a.id}','rate',this.value)">
+        <div class="unitInside">年率％</div>
+      </div>
+      <div class="assetFieldSafe">
+        <label>口座区分</label>
+        <input class="input" placeholder="例：NISA" value="${a.account}" onchange="updAsset('${a.id}','account',this.value)">
+        <div class="unitInside">NISA/特定/iDeCo</div>
+      </div>
     </div>
-    <div class="assetFieldSafe">
-      <label>口座区分</label>
-      <input class="input" placeholder="例：NISA" value="${a.account}" onchange="updAsset('${a.id}','account',this.value)">
-      <div class="unitInside">NISA/特定/iDeCo</div>
-    </div>
-  </div>
-  <button type="button" class="btn red mini delBtn" onclick="delAsset('${a.id}');return false;">×</button>
-</div>`).join('')+`<button type="button" class="btn secondary addAssetBtnSafe" onclick="addAsset();return false;">＋ 資産を追加</button>`;assetTotal.textContent=yen(totalAsset());avgReturn.textContent=pct(avgRate());drawDonut()}function updAsset(i,f,v){let a=state.assets.find(x=>x.id===i);if(f==='amountYen')a.amount=parseYenInput(v);else a[f]=(f==='name'||f==='account')?v:+v;save();renderAll()}function delAsset(i){state.assets=state.assets.filter(x=>x.id!==i);save();renderAll()}function addAsset(){state.assets=Array.isArray(state.assets)?state.assets:[];state.assets.push({id:id(),name:'新規資産',amount:0,rate:5,account:'特定'});save();renderAll();toast('資産を追加しました')}
+    <button type="button" class="btn red mini delBtn" onclick="delAsset('${a.id}');return false;">×</button>
+  </div>`).join('') + `<button type="button" class="btn secondary addAssetBtnSafe" onclick="addAsset();return false;">＋ 資産を追加</button>`;
+  assetTotal.textContent=yen(totalAsset());
+  avgReturn.textContent=pct(avgRate());
+  drawDonut();
+}function updAsset(i,f,v){let a=state.assets.find(x=>x.id===i);if(!a)return;if(f==='amountYen')a.amount=parseYenInput(v);else a[f]=(f==='name'||f==='account')?v:+v;save();renderAll()}function delAsset(i){state.assets=state.assets.filter(x=>x.id!==i);save();renderAll()}function addAsset(){state.assets=Array.isArray(state.assets)?state.assets:[];state.assets.push({id:id(),name:'新規資産',amount:0,rate:5,account:'特定'});save();renderAll();toast('資産を追加しました')}
 function renderPlan(){['startAge','goalAge','goal','monthly','bonus','bonusCount','inc'].forEach(k=>{let idd=k==='goal'?'goalAmount':k==='inc'?'incomeGrowth':k;document.getElementById(idd).value=state.plan[k]});const need=neededMonthly();needMonthly.textContent=yen(need);const diff=need-state.plan.monthly;needGap.textContent=(diff>=0?'+':'')+diff.toFixed(1)+'万円/月';needGap.className='kpi-num '+(diff<=0?'greenTxt':'yellowTxt')}function savePlanUI(){state.plan.startAge=+startAge.value;state.plan.goalAge=+goalAge.value;state.plan.goal=+goalAmount.value;state.plan.monthly=+monthly.value;state.plan.bonus=+bonus.value;state.plan.bonusCount=+bonusCount.value;state.plan.inc=+incomeGrowth.value;save();toast();renderAll()}function neededMonthly(){let lo=0,hi=100;const original=state.plan.monthly;for(let n=0;n<40;n++){state.plan.monthly=(lo+hi)/2;let v=simulate()[idxFromAge(state.plan.goalAge)].asset;if(v>=state.plan.goal)hi=state.plan.monthly;else lo=state.plan.monthly}state.plan.monthly=original;return hi}
 function setView(v){viewMode=v;zoomAge=null;viewYear.classList.toggle('active',v==='year');viewMonth.classList.toggle('active',v==='month');drawMain();drawActual()}
 function zoomToAge(age){zoomAge=Math.max(state.plan.startAge,Math.min(state.plan.endAge-1,Math.round(age)));viewMode='zoom';viewYear.classList.remove('active');viewMonth.classList.remove('active');drawMain();drawActual();toast(`${zoomAge}歳の月次にズーム`)}
