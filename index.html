@@ -3,91 +3,702 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>ASSET MANAGER PRO V7.6.1 VERIFIED</title>
+<title>ASSET MANAGER PRO V7.6.2</title>
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="資産1億円" />
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-:root{--bg:#07101f;--card:#17213a;--card2:#10192d;--line:#2b3c68;--text:#f3f7ff;--muted:#9aa8c6;--blue:#4f8ef7;--green:#38d99b;--yellow:#f5a316;--red:#ef4444;--shadow:0 20px 60px rgba(0,0,0,.35);--radius:26px;font-family:-apple-system,BlinkMacSystemFont,'Noto Sans JP',system-ui,sans-serif}*{box-sizing:border-box}html,body{margin:0;background:linear-gradient(180deg,#0b1224,#050b15 65%);color:var(--text);min-height:100%;-webkit-tap-highlight-color:transparent}button,input,select,textarea{font:inherit}.app{max-width:820px;margin:0 auto;padding:28px 22px 56px}.hero{text-align:center;padding:30px 0 18px}.label{letter-spacing:.28em;color:#a9b4cf;font-size:14px}.hero h1{font-size:clamp(36px,8vw,58px);line-height:1.12;margin:12px 0 10px}.hero h1 span{color:var(--blue)}.sub{color:var(--muted);font-size:17px}.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;background:#080f1f;padding:12px;margin:10px 0 24px}.tab{border:1px solid var(--line);background:#111a30;color:#aab5cf;border-radius:22px;padding:18px 8px;font-weight:800;font-size:16px;min-height:58px}.tab.active{background:linear-gradient(135deg,#4f8ef7,#67a3ff);color:white}.panel{display:none}.panel.active{display:block}.card{background:linear-gradient(180deg,#1a2540,#111a30);border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin:18px 0;box-shadow:var(--shadow)}.title{font-size:24px;font-weight:900;margin-bottom:10px}.desc{color:var(--muted);line-height:1.75}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.kpi{text-align:center}.kpi-label{color:var(--muted);font-size:14px;margin-bottom:12px}.kpi-num{font-size:28px;font-weight:900}.accent{color:var(--blue)}.green{color:var(--green)}.yellow{color:var(--yellow)}.input{width:100%;background:#0b1326;border:1px solid var(--line);border-radius:14px;color:var(--text);padding:12px 14px;outline:none}.input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(79,142,247,.18)}.btn{border:0;border-radius:18px;padding:14px 18px;font-weight:900;color:white;background:linear-gradient(135deg,#4f8ef7,#67a3ff);min-height:52px;cursor:pointer}.btn.secondary{background:#0b1326;border:1px solid var(--line);color:var(--text)}.btn.red{background:linear-gradient(135deg,#ef4444,#dc2626)}.btn.ghost{background:#0b1326;border:1px dashed var(--blue);color:var(--blue)}.assetList{display:flex;flex-direction:column;gap:12px}.assetCard{display:grid;grid-template-columns:34px 1fr 40px;grid-template-areas:"drag name del" "drag fields del";gap:8px;align-items:start;background:#111a30;border:1px solid var(--line);border-radius:22px;padding:12px}.dragHandle{grid-area:drag;min-height:82px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.035);color:#91a3c9;display:flex;align-items:center;justify-content:center;font-size:19px;user-select:none;touch-action:none}.assetName{grid-area:name}.assetFields{grid-area:fields;display:grid;grid-template-columns:1.12fr .78fr .95fr;gap:8px}.field label,.assetName label{display:block;color:#aeb8d4;font-size:11px;font-weight:900;margin-bottom:4px}.field .input,.assetName .input{min-height:40px;padding:8px 10px;font-size:15px}.unit{font-size:10px;color:#7f8cac;margin-top:3px;line-height:1.25}.delBtn{grid-area:del;width:38px;height:38px;min-height:38px;border-radius:12px;padding:0;font-size:17px;align-self:start}.addAssetBtn{width:100%;margin-top:12px;min-height:58px;position:relative;z-index:10;touch-action:manipulation}.assetCard.dragging{opacity:.55}.assetCard.dragOver{outline:2px solid rgba(79,142,247,.8)}.moveBtns{display:flex;gap:6px;margin-top:6px}.moveBtns button{flex:1;min-height:32px;padding:4px;border-radius:10px}.chartBox{height:300px;position:relative}.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#0b1326;border:1px solid var(--line);color:white;border-radius:999px;padding:12px 18px;opacity:0;pointer-events:none;transition:.25s;z-index:9999}.toast.show{opacity:1}.status{display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:center}.emoji{font-size:30px}.bar{height:12px;background:#27345f;border-radius:99px;overflow:hidden;margin-top:14px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--green));width:0}.small{font-size:13px;color:var(--muted);line-height:1.6}.footer{color:var(--muted);font-size:13px;line-height:1.7;margin:24px 4px}@media(max-width:560px){.app{padding:22px 16px 52px}.tabs{gap:9px}.tab{font-size:15px;padding:14px 4px;min-height:52px}.grid2{gap:12px}.card{padding:20px}.assetCard{grid-template-columns:30px 1fr 38px;padding:10px}.assetFields{grid-template-columns:1.08fr .78fr .92fr;gap:7px}.hero h1{font-size:42px}.chartBox{height:270px}.field label,.assetName label{font-size:10.5px}.field .input,.assetName .input{font-size:14px;padding:8px}}
+:root{--bg:#07101f;--card:#17213a;--card2:#10192d;--line:#2b3c68;--text:#f3f7ff;--muted:#9aa8c6;--blue:#4f8ef7;--green:#38d99b;--yellow:#f5a316;--red:#ef4444;--shadow:0 20px 60px rgba(0,0,0,.35);--radius:26px;font-family:-apple-system,BlinkMacSystemFont,'Noto Sans JP',system-ui,sans-serif}*{box-sizing:border-box}html,body{margin:0;background:linear-gradient(180deg,#0b1224,#050b15 65%);color:var(--text);min-height:100%;-webkit-tap-highlight-color:transparent}button,input,select,textarea{font:inherit}.app{max-width:820px;margin:0 auto;padding:28px 22px 56px}.hero{text-align:center;padding:30px 0 18px}.label{letter-spacing:.28em;color:#a9b4cf;font-size:14px}.hero h1{font-size:clamp(36px,8vw,58px);line-height:1.12;margin:12px 0 10px}.hero h1 span{color:var(--blue)}.sub{color:var(--muted);font-size:17px}
+/* タブ：8個対応で2行 */
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:#080f1f;padding:10px;margin:10px 0 24px;border-radius:18px}.tab{border:1px solid var(--line);background:#111a30;color:#aab5cf;border-radius:18px;padding:14px 6px;font-weight:800;font-size:14px;min-height:48px;cursor:pointer}.tab.active{background:linear-gradient(135deg,#4f8ef7,#67a3ff);color:white}
+.panel{display:none}.panel.active{display:block}.card{background:linear-gradient(180deg,#1a2540,#111a30);border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin:18px 0;box-shadow:var(--shadow)}.title{font-size:24px;font-weight:900;margin-bottom:10px}.desc{color:var(--muted);line-height:1.75}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.kpi{text-align:center}.kpi-label{color:var(--muted);font-size:14px;margin-bottom:12px}.kpi-num{font-size:28px;font-weight:900}.accent{color:var(--blue)}.green{color:var(--green)}.yellow{color:var(--yellow)}.input{width:100%;background:#0b1326;border:1px solid var(--line);border-radius:14px;color:var(--text);padding:12px 14px;outline:none}.input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(79,142,247,.18)}.btn{border:0;border-radius:18px;padding:14px 18px;font-weight:900;color:white;background:linear-gradient(135deg,#4f8ef7,#67a3ff);min-height:52px;cursor:pointer}.btn.secondary{background:#0b1326;border:1px solid var(--line);color:var(--text)}.btn.red{background:linear-gradient(135deg,#ef4444,#dc2626)}.btn.ghost{background:#0b1326;border:1px dashed var(--blue);color:var(--blue)}.assetList{display:flex;flex-direction:column;gap:12px}.assetCard{display:grid;grid-template-columns:34px 1fr 40px;grid-template-areas:"drag name del" "drag fields del";gap:8px;align-items:start;background:#111a30;border:1px solid var(--line);border-radius:22px;padding:12px}.dragHandle{grid-area:drag;min-height:82px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.035);color:#91a3c9;display:flex;align-items:center;justify-content:center;font-size:19px;user-select:none;touch-action:none;cursor:grab}.assetName{grid-area:name}.assetFields{grid-area:fields;display:grid;grid-template-columns:1.12fr .78fr .95fr;gap:8px}.field label,.assetName label{display:block;color:#aeb8d4;font-size:11px;font-weight:900;margin-bottom:4px}.field .input,.assetName .input{min-height:40px;padding:8px 10px;font-size:15px}.unit{font-size:10px;color:#7f8cac;margin-top:3px;line-height:1.25}.delBtn{grid-area:del;width:38px;height:38px;min-height:38px;border-radius:12px;padding:0;font-size:17px;align-self:start}.addAssetBtn{width:100%;margin-top:12px;min-height:58px;position:relative;z-index:10;touch-action:manipulation}.assetCard.dragging{opacity:.55}.assetCard.dragOver{outline:2px solid rgba(79,142,247,.8)}.moveBtns{display:flex;gap:6px;margin-top:6px}.moveBtns button{flex:1;min-height:32px;padding:4px;border-radius:10px}.chartBox{height:300px;position:relative}.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#0b1326;border:1px solid var(--line);color:white;border-radius:999px;padding:12px 18px;opacity:0;pointer-events:none;transition:.25s;z-index:9999}.toast.show{opacity:1}.status{display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:center}.emoji{font-size:30px}.bar{height:12px;background:#27345f;border-radius:99px;overflow:hidden;margin-top:14px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--green));width:0}.small{font-size:13px;color:var(--muted);line-height:1.6}.footer{color:var(--muted);font-size:13px;line-height:1.7;margin:24px 4px}.plan-label{display:block;color:#aeb8d4;font-size:12px;font-weight:900;margin-bottom:4px;margin-top:12px}@media(max-width:560px){.app{padding:22px 16px 52px}.tabs{gap:6px}.tab{font-size:13px;padding:11px 4px;min-height:44px}.grid2{gap:12px}.card{padding:20px}.assetCard{grid-template-columns:30px 1fr 38px;padding:10px}.assetFields{grid-template-columns:1.08fr .78fr .92fr;gap:7px}.hero h1{font-size:42px}.chartBox{height:270px}.field label,.assetName label{font-size:10.5px}.field .input,.assetName .input{font-size:14px;padding:8px}}
 </style>
 </head>
 <body>
 <div class="app">
-<header class="hero"><div class="label">ASSET MANAGER PRO V7.6.1 VERIFIED</div><h1>45歳から<span>1億円</span>を本気で狙う</h1><div id="heroSub" class="sub">600万円・年間240万円・60歳1億円プラン</div></header>
+<header class="hero">
+  <div class="label">ASSET MANAGER PRO V7.6.2</div>
+  <h1>45歳から<span>1億円</span>を本気で狙う</h1>
+  <div id="heroSub" class="sub">600万円・年間240万円・60歳1億円プラン</div>
+</header>
 <nav class="tabs" id="tabs">
-<button class="tab active" data-tab="home" type="button">ホーム</button><button class="tab" data-tab="assets" type="button">資産</button><button class="tab" data-tab="plan" type="button">計画</button><button class="tab" data-tab="sim" type="button">分析</button><button class="tab" data-tab="actual" type="button">実績</button><button class="tab" data-tab="events" type="button">イベント</button><button class="tab" data-tab="retire" type="button">老後</button><button class="tab" data-tab="save" type="button">保存</button>
+  <button class="tab active" data-tab="home"   type="button">ホーム</button>
+  <button class="tab"        data-tab="assets" type="button">資産</button>
+  <button class="tab"        data-tab="plan"   type="button">計画</button>
+  <button class="tab"        data-tab="sim"    type="button">分析</button>
+  <button class="tab"        data-tab="actual" type="button">実績</button>
+  <button class="tab"        data-tab="events" type="button">イベント</button>
+  <button class="tab"        data-tab="retire" type="button">老後</button>
+  <button class="tab"        data-tab="save"   type="button">保存</button>
 </nav>
+
+<!-- ホーム -->
 <section class="panel active" id="panel-home">
-<div class="grid2"><div class="card kpi"><div class="kpi-label">現在資産</div><div class="kpi-num" id="curAsset">—</div></div><div class="card kpi"><div class="kpi-label">60歳予測</div><div class="kpi-num accent" id="futureAsset">—</div></div><div class="card kpi"><div class="kpi-label">1億まで残り</div><div class="kpi-num yellow" id="toGoal">—</div></div><div class="card kpi"><div class="kpi-label">現在の1億達成率</div><div class="kpi-num green" id="progress">—</div></div></div>
-<div class="card status"><div class="emoji" id="statusIcon">🔵</div><div><div class="title" id="statusTitle">判定中</div><p class="desc" id="statusText">データを読み込んでいます。</p><div class="bar"><i id="statusBar"></i></div></div></div>
-<div class="card"><div class="title">今月チェック</div><p class="desc">60歳で1億円達成するために、今月あるべき資産額と現在資産を比較します。</p><div class="grid2"><div class="card kpi"><div class="kpi-label">今月あるべき資産</div><div class="kpi-num accent" id="monthTarget">—</div></div><div class="card kpi"><div class="kpi-label">現在資産との差額</div><div class="kpi-num green" id="monthDiff">—</div></div></div></div>
+  <div class="grid2">
+    <div class="card kpi"><div class="kpi-label">現在資産</div><div class="kpi-num" id="curAsset">—</div></div>
+    <div class="card kpi"><div class="kpi-label">目標年齢予測</div><div class="kpi-num accent" id="futureAsset">—</div></div>
+    <div class="card kpi"><div class="kpi-label">1億まで残り</div><div class="kpi-num yellow" id="toGoal">—</div></div>
+    <div class="card kpi"><div class="kpi-label">1億達成率</div><div class="kpi-num green" id="progress">—</div></div>
+  </div>
+  <div class="card status">
+    <div class="emoji" id="statusIcon">🔵</div>
+    <div>
+      <div class="title" id="statusTitle">判定中</div>
+      <p class="desc" id="statusText">データを読み込んでいます。</p>
+      <div class="bar"><i id="statusBar"></i></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="title">今月チェック</div>
+    <p class="desc">目標達成のために、今月あるべき資産額と現在資産を比較します。</p>
+    <div class="grid2">
+      <div class="card kpi"><div class="kpi-label">今月あるべき資産</div><div class="kpi-num accent" id="monthTarget">—</div></div>
+      <div class="card kpi"><div class="kpi-label">現在資産との差額</div><div class="kpi-num green" id="monthDiff">—</div></div>
+    </div>
+  </div>
 </section>
-<section class="panel" id="panel-assets"><div class="card"><div class="title">資産管理</div><p class="desc">保有額は1円単位で入力できます。☰をドラッグ、または↑↓で並び替えできます。</p><div id="assetList" class="assetList"></div><button id="addAssetBtn" type="button" class="btn ghost addAssetBtn">＋ 資産を追加</button></div><div class="grid2"><div class="card kpi"><div class="kpi-label">合計資産</div><div class="kpi-num" id="assetTotal">—</div></div><div class="card kpi"><div class="kpi-label">PF平均リターン</div><div class="kpi-num accent" id="avgReturn">—</div></div></div><div class="card"><div class="title">資産配分</div><div class="chartBox"><canvas id="donut"></canvas></div></div></section>
-<section class="panel" id="panel-plan"><div class="card"><div class="title">基本計画</div><div class="grid2"><label>開始年齢<input id="startAge" class="input" type="number" data-num="1" onfocus="this.select()" onchange="updPlan('startAge',this.value)"></label><label>目標年齢<input id="goalAge" class="input" type="number" data-num="1" onfocus="this.select()" onchange="updPlan('goalAge',this.value)"></label><label>目標額（万円）<input id="goal" class="input" type="number" data-num="1" onfocus="this.select()" onchange="updPlan('goal',this.value)"></label><label>毎月積立（万円）<input id="monthly" class="input" type="number" data-num="1" onfocus="this.select()" onchange="updPlan('monthly',this.value)"></label><label>ボーナス（万円/回）<input id="bonus" class="input" type="number" data-num="1" onfocus="this.select()" onchange="updPlan('bonus',this.value)"></label><label>ボーナス回数<input id="bonusCount" class="input" type="number" data-num="1" onfocus="this.select()" onchange="updPlan('bonusCount',this.value)"></label></div></div></section>
-<section class="panel" id="panel-sim"><div class="card"><div class="title">シミュレーション</div><p class="desc">年次表示からグラフ上を2本指で広げると、その年の月次推移にズームします。</p><div class="grid2"><button id="viewYear" class="btn" type="button">年次</button><button id="viewMonth" class="btn secondary" type="button">全期間月次</button></div></div><div class="card"><div id="zoomInfo" class="desc">年次グラフ上で2本指を広げると、その年の月次にズームします。</div><div class="chartBox"><canvas id="mainChart"></canvas></div></div><div class="grid2"><div class="card kpi"><div class="kpi-label">悲観4%</div><div class="kpi-num" id="simLow">—</div></div><div class="card kpi"><div class="kpi-label">標準PF</div><div class="kpi-num accent" id="simBase">—</div></div></div></section>
-<section class="panel" id="panel-actual"><div class="card"><div class="title">実績入力</div><p class="desc">月ごとの実績資産を1円単位で保存します。</p><label>年月<input id="actMonth" class="input" type="month"></label><label>実績資産（円）<input id="actAmount" class="input" inputmode="numeric" placeholder="例：6,390,000円"></label><button id="saveActual" class="btn" type="button">実績を保存</button><div id="actualList" class="small"></div></div></section>
-<section class="panel" id="panel-events"><div class="card"><div class="title">イベント</div><p class="desc">教育費・車・旅行などの予定支出をメモできます。</p><textarea id="eventMemo" class="input" rows="8"></textarea></div></section>
-<section class="panel" id="panel-retire"><div class="card"><div class="title">老後</div><p class="desc">65〜90歳の取り崩しは次バージョンでさらに強化します。</p></div></section>
-<section class="panel" id="panel-save"><div class="card"><div class="title">保存・バックアップ</div><p class="desc">データはこの端末のSafariに自動保存されます。JSONでバックアップできます。</p><div class="grid2"><button id="exportBtn" class="btn" type="button">JSON出力</button><button id="importBtn" class="btn secondary" type="button">JSON読込</button></div><textarea id="backupBox" class="input" rows="8" placeholder="ここにJSONが出ます"></textarea></div></section>
+
+<!-- 資産 -->
+<section class="panel" id="panel-assets">
+  <div class="card">
+    <div class="title">資産管理</div>
+    <p class="desc">保有額は1円単位で入力できます。☰をドラッグ、または↑↓で並び替えできます。</p>
+    <div id="assetList" class="assetList"></div>
+    <button id="addAssetBtn" type="button" class="btn ghost addAssetBtn">＋ 資産を追加</button>
+  </div>
+  <div class="grid2">
+    <div class="card kpi"><div class="kpi-label">合計資産</div><div class="kpi-num" id="assetTotal">—</div></div>
+    <div class="card kpi"><div class="kpi-label">PF平均リターン</div><div class="kpi-num accent" id="avgReturn">—</div></div>
+  </div>
+  <div class="card">
+    <div class="title">資産配分</div>
+    <div class="chartBox"><canvas id="donut"></canvas></div>
+  </div>
+</section>
+
+<!-- 計画 -->
+<section class="panel" id="panel-plan">
+  <div class="card">
+    <div class="title">基本計画</div>
+    <div class="grid2">
+      <div>
+        <label class="plan-label">開始年齢</label>
+        <input id="startAge" class="input" type="number" min="20" max="80">
+      </div>
+      <div>
+        <label class="plan-label">目標年齢</label>
+        <input id="goalAge" class="input" type="number" min="20" max="100">
+      </div>
+      <div>
+        <label class="plan-label">シミュレーション終了年齢</label>
+        <input id="endAge" class="input" type="number" min="20" max="100">
+      </div>
+      <div>
+        <label class="plan-label">目標額（万円）</label>
+        <input id="goal" class="input" type="number" min="0">
+      </div>
+      <div>
+        <label class="plan-label">毎月積立（万円）</label>
+        <input id="monthly" class="input" type="number" min="0" step="0.1">
+      </div>
+      <div>
+        <label class="plan-label">ボーナス（万円/回）</label>
+        <input id="bonus" class="input" type="number" min="0" step="0.1">
+      </div>
+      <div>
+        <label class="plan-label">ボーナス回数（年間）</label>
+        <input id="bonusCount" class="input" type="number" min="0" max="12">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 分析 -->
+<section class="panel" id="panel-sim">
+  <div class="card">
+    <div class="title">シミュレーション</div>
+    <p class="desc">年次表示からグラフ上を2本指で広げると、その年の月次推移にズームします。</p>
+    <div class="grid2">
+      <button id="viewYear"  class="btn"           type="button">年次</button>
+      <button id="viewMonth" class="btn secondary" type="button">全期間月次</button>
+    </div>
+  </div>
+  <div class="card">
+    <div id="zoomInfo" class="desc">年次グラフ上で2本指を広げると、その年の月次にズームします。</div>
+    <div class="chartBox"><canvas id="mainChart"></canvas></div>
+  </div>
+  <div class="grid2">
+    <div class="card kpi"><div class="kpi-label">悲観4%</div><div class="kpi-num" id="simLow">—</div></div>
+    <div class="card kpi"><div class="kpi-label">標準PF</div><div class="kpi-num accent" id="simBase">—</div></div>
+  </div>
+</section>
+
+<!-- 実績 -->
+<section class="panel" id="panel-actual">
+  <div class="card">
+    <div class="title">実績入力</div>
+    <p class="desc">月ごとの実績資産を円単位で保存します。</p>
+    <label class="plan-label">年月</label>
+    <input id="actMonth" class="input" type="month">
+    <label class="plan-label" style="margin-top:10px">実績資産（円）</label>
+    <input id="actAmount" class="input" inputmode="numeric" placeholder="例：6390000">
+    <button id="saveActual" class="btn" type="button" style="margin-top:12px;width:100%">実績を保存</button>
+    <div id="actualList" class="small" style="margin-top:14px"></div>
+  </div>
+</section>
+
+<!-- イベント -->
+<section class="panel" id="panel-events">
+  <div class="card">
+    <div class="title">イベント</div>
+    <p class="desc">教育費・車・旅行などの予定支出をメモできます。</p>
+    <textarea id="eventMemo" class="input" rows="10"></textarea>
+  </div>
+</section>
+
+<!-- 老後 -->
+<section class="panel" id="panel-retire">
+  <div class="card">
+    <div class="title">老後プラン（準備中）</div>
+    <p class="desc">65〜90歳の取り崩しシミュレーションは次バージョンで追加します。</p>
+  </div>
+</section>
+
+<!-- 保存 -->
+<section class="panel" id="panel-save">
+  <div class="card">
+    <div class="title">保存・バックアップ</div>
+    <p class="desc">データはこの端末のブラウザに自動保存されます。JSONでバックアップできます。</p>
+    <div class="grid2">
+      <button id="exportBtn" class="btn"           type="button">JSON出力</button>
+      <button id="importBtn" class="btn secondary" type="button">JSON読込</button>
+    </div>
+    <textarea id="backupBox" class="input" rows="10" style="margin-top:12px" placeholder="ここにJSONが出ます / ここにJSONを貼り付けてから「JSON読込」を押してください"></textarea>
+  </div>
+</section>
+
 <div id="toast" class="toast">保存しました</div>
 <div class="footer">※シミュレーションは概算です。将来の運用成果を保証するものではありません。</div>
 </div>
+
 <script>
-const KEY='asset-manager-pro-v7';
-const START_Y=2026,START_M=6;
-let charts={},viewMode='year',zoomAge=null,pinchStart=null,pinchDone=false;
-const $=id=>document.getElementById(id);
-const ym=(y,m)=>`${y}-${String(m).padStart(2,'0')}`;
-const id=()=>Math.random().toString(36).slice(2,9);
-const yen=v=>{v=+v||0; if(Math.abs(v)>=10000)return (v/10000).toFixed(2).replace(/\.00$/,'')+'億円'; return Math.round(v).toLocaleString('ja-JP')+'万円'};
-const yenFull=v=>(Math.round(+v||0)).toLocaleString('ja-JP')+'円';
-const yenInputFromMan=v=>Math.round((+v||0)*10000).toLocaleString('ja-JP')+'円';
-const parseYenInput=v=>(parseFloat(String(v).replace(/[^0-9.-]/g,''))||0)/10000;
-const pct=v=>(+v||0).toFixed(1)+'%';
-const def=()=>({plan:{startAge:45,endAge:70,goalAge:60,goal:10000,monthly:20,bonus:0,bonusCount:0},assets:[{id:id(),name:'S&P500',amount:600,rate:7,account:'NISA'}],actual:{},events:'',retire:{}});
-let state=def();
-function migrate(s){s=s||def();s.plan={...def().plan,...(s.plan||{})};s.assets=Array.isArray(s.assets)?s.assets:[];s.assets=s.assets.map(a=>({id:a.id||id(),name:a.name||'新規資産',amount:(typeof a.amountYen==='number'?a.amountYen/10000:(+a.amount||0)),rate:+a.rate||0,account:a.account||'特定'}));s.actual=s.actual||{};s.events=s.events||'';return s}
-function load(){try{state=migrate(JSON.parse(localStorage.getItem(KEY))||def())}catch(e){state=def()}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){/* storage unavailable */}}
-function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),1400)}
-function totalAsset(){return state.assets.reduce((s,a)=>s+(+a.amount||0),0)}
-function avgRate(){const t=totalAsset();return t?state.assets.reduce((s,a)=>s+(+a.amount||0)*(+a.rate||0),0)/t:0}
-function monthsTotal(){return (state.plan.endAge-state.plan.startAge)*12}
-function idxFromAge(age){return Math.max(0,Math.round((age-state.plan.startAge)*12))}
-function simulate(rate=avgRate()){const out=[];let asset=totalAsset();for(let i=0;i<=monthsTotal();i++){let age=state.plan.startAge+i/12;let y=START_Y+Math.floor((START_M-1+i)/12);let m=(START_M-1+i)%12+1;out.push({i,age,y,m,asset});if(i<monthsTotal()){asset*=1+(rate/100)/12;asset+=+state.plan.monthly||0;if(((i+1)%6===0))asset+=(+state.plan.bonus||0)*(+state.plan.bonusCount||0)/2}}return out}
-function goalLine(){const n=monthsTotal(),cur=totalAsset(),goal=+state.plan.goal||10000,target=idxFromAge(state.plan.goalAge);return Array.from({length:n+1},(_,i)=>i>=target?goal:cur+(goal-cur)*(i/Math.max(1,target)))}
-function renderHome(){const base=simulate(),current=totalAsset(),goal=+state.plan.goal||10000,goalIdx=idxFromAge(state.plan.goalAge),goalFuture=base[goalIdx]?.asset||0,nowRate=goal>0?current/goal*100:0,gapNow=Math.max(0,goal-current),targetNow=goalLine()[0]||current,diffNow=current-targetNow;$('curAsset').textContent=yen(current);$('futureAsset').textContent=yen(goalFuture);$('toGoal').textContent=yen(gapNow);$('progress').textContent=nowRate.toFixed(1)+'%';$('monthTarget').textContent=yen(targetNow);$('monthDiff').textContent=(diffNow>=0?'+':'')+yen(diffNow);$('heroSub').textContent=`現在${yen(current)} / 月${state.plan.monthly}万円 / ${state.plan.goalAge}歳${(goal/10000).toFixed(2)}億円目標`;if(diffNow>=0){$('statusTitle').textContent='順調';$('statusIcon').textContent='🟢';$('statusText').textContent='今月あるべき資産を上回っています。'}else{let short=Math.abs(diffNow);$('statusTitle').textContent=short<100?'注意':'要改善';$('statusIcon').textContent=short<100?'🟡':'🔴';$('statusText').textContent=`今月あるべき資産に対して${yen(short)}不足しています。`}$('statusBar').style.width=Math.max(0,Math.min(100,nowRate))+'%'}
-function renderAssets(){state.assets=Array.isArray(state.assets)?state.assets:[];$('assetList').innerHTML=state.assets.map((a,idx)=>`<div class="assetCard" draggable="true" data-id="${a.id}"><div class="dragHandle">☰</div><div class="assetName"><label>資産名・銘柄名</label><input class="input" value="${escapeHtml(a.name)}" onchange="updAsset('${a.id}','name',this.value)"></div><div class="assetFields"><div class="field"><label>保有額</label><input class="input" inputmode="numeric" value="${yenInputFromMan(a.amount)}" onchange="updAsset('${a.id}','amountYen',this.value);this.value=yenInputFromMan(state.assets.find(x=>x.id==='${a.id}').amount)"><div class="unit">1円単位</div></div><div class="field"><label>期待リターン</label><input class="input" type="number" step="0.1" value="${a.rate}" onchange="updAsset('${a.id}','rate',this.value)"><div class="unit">年率％</div></div><div class="field"><label>口座区分</label><input class="input" value="${escapeHtml(a.account)}" onchange="updAsset('${a.id}','account',this.value)"><div class="unit">NISA/特定/iDeCo</div></div><div class="moveBtns"><button type="button" class="btn secondary" onclick="moveAsset(${idx},${idx-1})">↑</button><button type="button" class="btn secondary" onclick="moveAsset(${idx},${idx+1})">↓</button></div></div><button type="button" class="btn red delBtn" onclick="delAsset('${a.id}')">×</button></div>`).join('');$('assetTotal').textContent=yen(totalAsset());$('avgReturn').textContent=pct(avgRate());drawDonut();setupDrag()}
-function escapeHtml(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-function addAsset(){state.assets.push({id:id(),name:'新規資産',amount:0,rate:5,account:'特定'});save();renderAll();setupNumberInputs();setTab('assets');toast('資産を追加しました')}
-function delAsset(i){state.assets=state.assets.filter(a=>a.id!==i);save();renderAll()}
-function updAsset(i,f,v){const a=state.assets.find(x=>x.id===i);if(!a)return;if(f==='amountYen')a.amount=parseYenInput(v);else a[f]=(f==='name'||f==='account')?v:+v;save();renderAll()}
-function moveAsset(from,to){if(to<0||to>=state.assets.length)return;const [x]=state.assets.splice(from,1);state.assets.splice(to,0,x);save();renderAll();toast('並び替えました')}
-function moveAssetById(fromId,toId){const f=state.assets.findIndex(a=>a.id===fromId),t=state.assets.findIndex(a=>a.id===toId);if(f<0||t<0||f===t)return;moveAsset(f,t)}
-function setupDrag(){const cards=[...document.querySelectorAll('.assetCard[data-id]')];let dragging=null;cards.forEach(card=>{card.addEventListener('dragstart',e=>{dragging=card.dataset.id;card.classList.add('dragging')});card.addEventListener('dragend',()=>{card.classList.remove('dragging');cards.forEach(c=>c.classList.remove('dragOver'))});card.addEventListener('dragover',e=>{e.preventDefault();card.classList.add('dragOver')});card.addEventListener('dragleave',()=>card.classList.remove('dragOver'));card.addEventListener('drop',e=>{e.preventDefault();card.classList.remove('dragOver');moveAssetById(dragging,card.dataset.id)})})}
-function updPlan(k,v){state.plan[k]=numVal(v,state.plan[k]||0);save();renderAll()}
-function renderPlan(){
-  ['startAge','goalAge','goal','monthly','bonus','bonusCount'].forEach(k=>{
-    const el=document.getElementById(k);
-    if(el) el.value=state.plan[k];
-  });
-  setupNumberInputs();
+// ─── 定数 ───────────────────────────────────────────────────────────────
+const KEY = 'asset-manager-pro-v7';
+const START_Y = 2026, START_M = 6;
+let charts = {}, viewMode = 'year', zoomAge = null;
+let pinchStart = null, pinchDone = false;
+
+// ─── ユーティリティ ──────────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const ym = (y, m) => `${y}-${String(m).padStart(2, '0')}`;
+const uid = () => Math.random().toString(36).slice(2, 9);
+
+// 万円単位の数値を「億円」「万円」表示に変換
+function yen(v) {
+  v = +v || 0;
+  if (Math.abs(v) >= 10000) return (v / 10000).toFixed(2).replace(/\.00$/, '') + '億円';
+  return Math.round(v).toLocaleString('ja-JP') + '万円';
 }
-function setView(v){viewMode=v;zoomAge=null;$('viewYear').classList.toggle('active',v==='year');$('viewMonth').classList.toggle('active',v==='month');drawMain()}
-function zoomToAge(age){zoomAge=Math.max(state.plan.startAge,Math.min(state.plan.endAge-1,Math.round(age)));viewMode='zoom';drawMain();toast(`${zoomAge}歳を月次表示`)}
-function labels(arr){return arr.map(p=>viewMode==='year'?Math.round(p.age)+'歳':viewMode==='zoom'?`${p.m}月`:`${p.y}/${p.m}`)}
-function filterView(arr){if(viewMode==='year')return arr.filter(p=>p.i%12===0||p.i===arr.length-1);if(viewMode==='zoom'){let s=idxFromAge(zoomAge||state.plan.startAge);return arr.filter(p=>p.i>=s&&p.i<=s+12)}return arr}
-function ds(label,arr,color,dash=false){return{label,data:arr.map(p=>p.asset),borderColor:color,backgroundColor:'transparent',borderWidth:3,borderDash:dash?[7,6]:[],tension:.28,pointRadius:0}}
-function drawMain(){const low=filterView(simulate(4)),base=filterView(simulate(avgRate())),high=filterView(simulate(10)),gl=filterView(simulate().map((p,i)=>({...p,asset:goalLine()[i]})));$('simLow').textContent=yen(simulate(4)[idxFromAge(state.plan.goalAge)]?.asset||0);$('simBase').textContent=yen(simulate(avgRate())[idxFromAge(state.plan.goalAge)]?.asset||0);$('zoomInfo').textContent=viewMode==='zoom'?`${zoomAge}歳の1年分を月次表示中。年次ボタンで戻れます。`:(viewMode==='year'?'年次グラフ上で2本指を広げると、その年の月次にズームします。':'45〜70歳の全期間を月次表示中。');makeChart('mainChart','line',{labels:labels(base),datasets:[ds('悲観4%',low,'#f59e0b'),ds('標準PF',base,'#4f8ef7'),ds('楽観10%',high,'#34d399'),ds('1億目標ライン',gl,'#ef4444',true)]});setupPinchZoom()}
-function drawDonut(){makeChart('donut','doughnut',{labels:state.assets.map(a=>a.name),datasets:[{data:state.assets.map(a=>a.amount),backgroundColor:['#4f8ef7','#34d399','#f59e0b','#ef4444','#a78bfa','#22d3ee']}]},{cutout:'65%'})}
-function makeChart(id,type,data,extra={}){if(!window.Chart)return;const el=$(id);if(!el)return;if(charts[id])charts[id].destroy();charts[id]=new Chart(el,{type,data,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#aeb8d4'}}},scales:type==='line'?{x:{ticks:{color:'#aeb8d4'},grid:{color:'#26365f'}},y:{ticks:{color:'#aeb8d4',callback:v=>yen(v)},grid:{color:'#26365f'}}}:undefined,...extra}})}
-function setupPinchZoom(){const canvas=$('mainChart');if(!canvas||canvas.dataset.pinchReady)return;canvas.dataset.pinchReady='1';const dist=t=>Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY),mid=t=>(t[0].clientX+t[1].clientX)/2;canvas.addEventListener('touchstart',e=>{if(e.touches.length===2){pinchStart={d:dist(e.touches),x:mid(e.touches)};pinchDone=false}},{passive:true});canvas.addEventListener('touchmove',e=>{if(!pinchStart||e.touches.length!==2||pinchDone)return;let d=dist(e.touches);if(d-pinchStart.d>35){e.preventDefault();const r=canvas.getBoundingClientRect(),ratio=Math.max(0,Math.min(1,(pinchStart.x-r.left)/Math.max(1,r.width)));zoomToAge(state.plan.startAge+ratio*(state.plan.endAge-state.plan.startAge));pinchDone=true}},{passive:false});canvas.addEventListener('touchend',()=>{pinchStart=null;pinchDone=false},{passive:true})}
-function renderActual(){const rows=Object.entries(state.actual).sort().map(([k,v])=>`${k}: ${yenFull(v)}`).join('<br>');$('actualList').innerHTML=rows||'未記録'}
-function renderAll(){renderHome();renderAssets();renderPlan();drawMain();renderActual();save()}
-function setTab(tab){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+tab));setTimeout(()=>{Object.values(charts).forEach(c=>c&&c.resize&&c.resize())},60)}
-function init(){load();document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));$('addAssetBtn').addEventListener('click',addAsset);$('viewYear').addEventListener('click',()=>setView('year'));$('viewMonth').addEventListener('click',()=>setView('month'));['startAge','goalAge','goal','monthly','bonus','bonusCount'].forEach(k=>$(k).addEventListener('input',e=>{state.plan[k]=+e.target.value;renderAll()}));$('eventMemo').addEventListener('input',e=>{state.events=e.target.value;save()});$('saveActual').addEventListener('click',()=>{state.actual[$('actMonth').value]=parseFloat(String($('actAmount').value).replace(/[^0-9.-]/g,''))||0;save();renderActual();toast('実績を保存しました')});$('exportBtn').addEventListener('click',()=>{$('backupBox').value=JSON.stringify(state,null,2)});$('importBtn').addEventListener('click',()=>{try{state=migrate(JSON.parse($('backupBox').value));save();renderAll();toast('読み込みました')}catch(e){toast('JSONを確認してください')}});$('actMonth').value=ym(START_Y,START_M);renderAll()}
-document.addEventListener('DOMContentLoaded',init);
+// 円単位をそのまま表示
+const yenFull = v => Math.round(+v || 0).toLocaleString('ja-JP') + '円';
+// 万円単位 → 円文字列表示（input表示用）
+const manToYenStr = v => Math.round((+v || 0) * 10000).toLocaleString('ja-JP') + '円';
+// 「1,234,567円」など → 万円単位の数値
+const parseYenStr = v => (parseFloat(String(v).replace(/[^0-9.-]/g, '')) || 0) / 10000;
+// 円単位文字列 → 円数値（実績入力用）
+const parseYenRaw = v => parseFloat(String(v).replace(/[^0-9.-]/g, '')) || 0;
+const pct = v => (+v || 0).toFixed(1) + '%';
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+
+// ─── デフォルト状態 ──────────────────────────────────────────────────────
+function def() {
+  return {
+    plan: { startAge: 45, endAge: 70, goalAge: 60, goal: 10000, monthly: 20, bonus: 0, bonusCount: 2 },
+    assets: [{ id: uid(), name: 'S&P500', amount: 600, rate: 7, account: 'NISA' }],
+    actual: {},
+    events: ''
+  };
+}
+
+let state = def();
+
+// ─── マイグレーション ────────────────────────────────────────────────────
+function migrate(s) {
+  s = s || def();
+  s.plan = { ...def().plan, ...(s.plan || {}) };
+  // endAge が未定義の場合はデフォルト値
+  if (!s.plan.endAge) s.plan.endAge = 70;
+  s.assets = Array.isArray(s.assets) ? s.assets : [];
+  s.assets = s.assets.map(a => ({
+    id:      a.id || uid(),
+    name:    a.name || '新規資産',
+    // 旧バージョンが amountYen（円単位）を持っていた場合にも対応
+    amount:  typeof a.amountYen === 'number' ? a.amountYen / 10000 : (+a.amount || 0),
+    rate:    +a.rate || 0,
+    account: a.account || '特定'
+  }));
+  s.actual = s.actual || {};
+  s.events = s.events || '';
+  return s;
+}
+
+// ─── 永続化 ──────────────────────────────────────────────────────────────
+function load() {
+  try { state = migrate(JSON.parse(localStorage.getItem(KEY)) || def()); }
+  catch (e) { state = def(); }
+}
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(state)); }
+  catch (e) { /* storage unavailable */ }
+}
+
+// ─── トースト ─────────────────────────────────────────────────────────────
+function toast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.classList.remove('show'), 1400);
+}
+
+// ─── 集計 ────────────────────────────────────────────────────────────────
+function totalAsset() { return state.assets.reduce((s, a) => s + (+a.amount || 0), 0); }
+function avgRate() {
+  const t = totalAsset();
+  return t ? state.assets.reduce((s, a) => s + (+a.amount || 0) * (+a.rate || 0), 0) / t : 0;
+}
+function monthsTotal() { return (state.plan.endAge - state.plan.startAge) * 12; }
+function idxFromAge(age) { return Math.max(0, Math.round((age - state.plan.startAge) * 12)); }
+
+// ─── シミュレーション ────────────────────────────────────────────────────
+function simulate(rate) {
+  if (rate === undefined) rate = avgRate();
+  const out = [];
+  let asset = totalAsset();
+  const total = monthsTotal();
+  for (let i = 0; i <= total; i++) {
+    const age = state.plan.startAge + i / 12;
+    const y   = START_Y + Math.floor((START_M - 1 + i) / 12);
+    const m   = (START_M - 1 + i) % 12 + 1;
+    out.push({ i, age, y, m, asset });
+    if (i < total) {
+      // 月次複利
+      asset *= 1 + (rate / 100) / 12;
+      // 毎月積立（万円）
+      asset += +state.plan.monthly || 0;
+      // ボーナス：年間回数を12で割って毎月均等加算（bonusCount回/年 × bonus万円/回）
+      const bonusPerMonth = ((+state.plan.bonus || 0) * (+state.plan.bonusCount || 0)) / 12;
+      asset += bonusPerMonth;
+    }
+  }
+  return out;
+}
+
+// 目標ラインを線形補間で生成
+function goalLine() {
+  const n      = monthsTotal();
+  const cur    = totalAsset();
+  const goal   = +state.plan.goal || 10000;
+  const target = idxFromAge(state.plan.goalAge);
+  return Array.from({ length: n + 1 }, (_, i) =>
+    i >= target ? goal : cur + (goal - cur) * (i / Math.max(1, target))
+  );
+}
+
+// ─── ホーム描画 ───────────────────────────────────────────────────────────
+function renderHome() {
+  const base      = simulate();
+  const current   = totalAsset();
+  const goal      = +state.plan.goal || 10000;
+  const goalIdx   = idxFromAge(state.plan.goalAge);
+  const goalFuture = base[goalIdx]?.asset || 0;
+  const nowRate   = goal > 0 ? current / goal * 100 : 0;
+  const gapNow    = Math.max(0, goal - current);
+  const targetNow = goalLine()[0] || current;
+  const diffNow   = current - targetNow;
+
+  $('curAsset').textContent    = yen(current);
+  $('futureAsset').textContent = yen(goalFuture);
+  $('toGoal').textContent      = yen(gapNow);
+  $('progress').textContent    = nowRate.toFixed(1) + '%';
+  $('monthTarget').textContent = yen(targetNow);
+  $('monthDiff').textContent   = (diffNow >= 0 ? '+' : '') + yen(diffNow);
+  $('heroSub').textContent     = `現在${yen(current)} / 月${state.plan.monthly}万円 / ${state.plan.goalAge}歳${(goal / 10000).toFixed(2)}億円目標`;
+  $('monthDiff').style.color   = diffNow >= 0 ? 'var(--green)' : 'var(--red)';
+
+  if (diffNow >= 0) {
+    $('statusTitle').textContent = '順調';
+    $('statusIcon').textContent  = '🟢';
+    $('statusText').textContent  = '今月あるべき資産を上回っています。';
+  } else {
+    const short = Math.abs(diffNow);
+    $('statusTitle').textContent = short < 100 ? '注意' : '要改善';
+    $('statusIcon').textContent  = short < 100 ? '🟡' : '🔴';
+    $('statusText').textContent  = `今月あるべき資産に対して${yen(short)}不足しています。`;
+  }
+  $('statusBar').style.width = Math.max(0, Math.min(100, nowRate)) + '%';
+}
+
+// ─── 資産描画 ─────────────────────────────────────────────────────────────
+function renderAssets() {
+  state.assets = Array.isArray(state.assets) ? state.assets : [];
+  $('assetList').innerHTML = state.assets.map((a, idx) => `
+    <div class="assetCard" draggable="true" data-id="${a.id}">
+      <div class="dragHandle">☰</div>
+      <div class="assetName">
+        <label>資産名・銘柄名</label>
+        <input class="input" value="${escapeHtml(a.name)}"
+               onchange="updAsset('${a.id}','name',this.value)">
+      </div>
+      <div class="assetFields">
+        <div class="field">
+          <label>保有額</label>
+          <input class="input" inputmode="numeric"
+                 value="${manToYenStr(a.amount)}"
+                 onchange="updAssetAmount('${a.id}',this)"
+                 onfocus="this.select()">
+          <div class="unit">1円単位</div>
+        </div>
+        <div class="field">
+          <label>期待リターン</label>
+          <input class="input" type="number" step="0.1" value="${a.rate}"
+                 onchange="updAsset('${a.id}','rate',this.value)">
+          <div class="unit">年率％</div>
+        </div>
+        <div class="field">
+          <label>口座区分</label>
+          <input class="input" value="${escapeHtml(a.account)}"
+                 onchange="updAsset('${a.id}','account',this.value)">
+          <div class="unit">NISA/特定/iDeCo</div>
+        </div>
+        <div class="moveBtns">
+          <button type="button" class="btn secondary" onclick="moveAsset(${idx},${idx-1})">↑</button>
+          <button type="button" class="btn secondary" onclick="moveAsset(${idx},${idx+1})">↓</button>
+        </div>
+      </div>
+      <button type="button" class="btn red delBtn" onclick="delAsset('${a.id}')">×</button>
+    </div>`).join('');
+
+  $('assetTotal').textContent = yen(totalAsset());
+  $('avgReturn').textContent  = pct(avgRate());
+  drawDonut();
+  setupDrag();
+}
+
+// 保有額の変更（イベントループ再発火を防ぐため blur 後に表示更新）
+function updAssetAmount(id, input) {
+  const a = state.assets.find(x => x.id === id);
+  if (!a) return;
+  a.amount = parseYenStr(input.value);
+  save();
+  // blur後に表示を更新（onchangeの再発火を避ける）
+  setTimeout(() => { input.value = manToYenStr(a.amount); }, 0);
+  renderHome();
+  $('assetTotal').textContent = yen(totalAsset());
+  $('avgReturn').textContent  = pct(avgRate());
+  drawDonut();
+  drawMain();
+}
+
+function addAsset() {
+  state.assets.push({ id: uid(), name: '新規資産', amount: 0, rate: 5, account: '特定' });
+  save();
+  renderAll();
+  setTab('assets');
+  toast('資産を追加しました');
+}
+
+function delAsset(id) {
+  state.assets = state.assets.filter(a => a.id !== id);
+  save();
+  renderAll();
+  toast('削除しました');
+}
+
+function updAsset(id, field, value) {
+  const a = state.assets.find(x => x.id === id);
+  if (!a) return;
+  if (field === 'name' || field === 'account') a[field] = value;
+  else a[field] = +value;
+  save();
+  renderAll();
+}
+
+function moveAsset(from, to) {
+  if (to < 0 || to >= state.assets.length) return;
+  const [x] = state.assets.splice(from, 1);
+  state.assets.splice(to, 0, x);
+  save();
+  renderAll();
+  toast('並び替えました');
+}
+
+function moveAssetById(fromId, toId) {
+  const f = state.assets.findIndex(a => a.id === fromId);
+  const t = state.assets.findIndex(a => a.id === toId);
+  if (f < 0 || t < 0 || f === t) return;
+  moveAsset(f, t);
+}
+
+// ─── ドラッグ並び替え ─────────────────────────────────────────────────────
+function setupDrag() {
+  const cards = [...document.querySelectorAll('.assetCard[data-id]')];
+  let dragging = null;
+  cards.forEach(card => {
+    card.addEventListener('dragstart', () => {
+      dragging = card.dataset.id;
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+      cards.forEach(c => c.classList.remove('dragOver'));
+    });
+    card.addEventListener('dragover',  e => { e.preventDefault(); card.classList.add('dragOver'); });
+    card.addEventListener('dragleave', ()  => card.classList.remove('dragOver'));
+    card.addEventListener('drop', e => {
+      e.preventDefault();
+      card.classList.remove('dragOver');
+      moveAssetById(dragging, card.dataset.id);
+    });
+  });
+}
+
+// ─── 計画描画 ─────────────────────────────────────────────────────────────
+function renderPlan() {
+  const p = state.plan;
+  ['startAge','goalAge','endAge','goal','monthly','bonus','bonusCount'].forEach(k => {
+    const el = $(k);
+    if (el) el.value = p[k];
+  });
+}
+
+// ─── チャート ─────────────────────────────────────────────────────────────
+function setView(v) {
+  viewMode = v;
+  zoomAge  = null;
+  $('viewYear').classList.toggle('active',  v === 'year');
+  $('viewMonth').classList.toggle('active', v === 'month');
+  $('viewYear').classList.toggle('btn',     true);
+  $('viewYear').classList.toggle('secondary', v !== 'year');
+  $('viewMonth').classList.toggle('secondary', v !== 'month');
+  drawMain();
+}
+
+function zoomToAge(age) {
+  zoomAge  = Math.max(state.plan.startAge, Math.min(state.plan.endAge - 1, Math.round(age)));
+  viewMode = 'zoom';
+  drawMain();
+  toast(`${zoomAge}歳を月次表示`);
+}
+
+function filterView(arr) {
+  if (viewMode === 'year') return arr.filter(p => p.i % 12 === 0 || p.i === arr.length - 1);
+  if (viewMode === 'zoom') {
+    const s = idxFromAge(zoomAge || state.plan.startAge);
+    return arr.filter(p => p.i >= s && p.i <= s + 12);
+  }
+  return arr;
+}
+
+function chartLabels(arr) {
+  return arr.map(p =>
+    viewMode === 'year' ? Math.round(p.age) + '歳' :
+    viewMode === 'zoom' ? `${p.m}月` :
+    `${p.y}/${p.m}`
+  );
+}
+
+function ds(label, arr, color, dash = false) {
+  return {
+    label,
+    data:        arr.map(p => p.asset),
+    borderColor: color,
+    backgroundColor: 'transparent',
+    borderWidth: 3,
+    borderDash:  dash ? [7, 6] : [],
+    tension:     0.28,
+    pointRadius: 0
+  };
+}
+
+function drawMain() {
+  const simLow  = simulate(4);
+  const simBase = simulate(avgRate());
+  const simHigh = simulate(10);
+  const gl      = simulate().map((p, i) => ({ ...p, asset: goalLine()[i] }));
+
+  const goalIdx = idxFromAge(state.plan.goalAge);
+  $('simLow').textContent  = yen(simLow[goalIdx]?.asset  || 0);
+  $('simBase').textContent = yen(simBase[goalIdx]?.asset || 0);
+
+  $('zoomInfo').textContent =
+    viewMode === 'zoom'  ? `${zoomAge}歳の1年分を月次表示中。年次ボタンで戻れます。` :
+    viewMode === 'year'  ? '年次グラフ上で2本指を広げると、その年の月次にズームします。' :
+    `${state.plan.startAge}〜${state.plan.endAge}歳の全期間を月次表示中。`;
+
+  const base = filterView(simBase);
+  makeChart('mainChart', 'line', {
+    labels:   chartLabels(base),
+    datasets: [
+      ds('悲観4%',     filterView(simLow),  '#f59e0b'),
+      ds('標準PF',     base,                '#4f8ef7'),
+      ds('楽観10%',    filterView(simHigh), '#34d399'),
+      ds('目標ライン', filterView(gl),      '#ef4444', true)
+    ]
+  });
+  setupPinchZoom();
+}
+
+function drawDonut() {
+  if (!state.assets.length) return;
+  makeChart('donut', 'doughnut', {
+    labels:   state.assets.map(a => a.name),
+    datasets: [{
+      data: state.assets.map(a => a.amount),
+      backgroundColor: ['#4f8ef7','#34d399','#f59e0b','#ef4444','#a78bfa','#22d3ee','#fb923c','#e879f9']
+    }]
+  }, { cutout: '65%' });
+}
+
+function makeChart(id, type, data, extra = {}) {
+  if (!window.Chart) return;
+  const el = $(id);
+  if (!el) return;
+  if (charts[id]) charts[id].destroy();
+  charts[id] = new Chart(el, {
+    type,
+    data,
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#aeb8d4' } } },
+      scales: type === 'line' ? {
+        x: { ticks: { color: '#aeb8d4' }, grid: { color: '#26365f' } },
+        y: { ticks: { color: '#aeb8d4', callback: v => yen(v) }, grid: { color: '#26365f' } }
+      } : undefined,
+      ...extra
+    }
+  });
+}
+
+// ─── ピンチズーム ─────────────────────────────────────────────────────────
+function setupPinchZoom() {
+  const canvas = $('mainChart');
+  if (!canvas || canvas.dataset.pinchReady) return;
+  canvas.dataset.pinchReady = '1';
+  const dist = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+  const midX = t => (t[0].clientX + t[1].clientX) / 2;
+
+  canvas.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) { pinchStart = { d: dist(e.touches), x: midX(e.touches) }; pinchDone = false; }
+  }, { passive: true });
+
+  canvas.addEventListener('touchmove', e => {
+    if (!pinchStart || e.touches.length !== 2 || pinchDone) return;
+    if (dist(e.touches) - pinchStart.d > 35) {
+      e.preventDefault();
+      const r = canvas.getBoundingClientRect();
+      const ratio = Math.max(0, Math.min(1, (pinchStart.x - r.left) / Math.max(1, r.width)));
+      zoomToAge(state.plan.startAge + ratio * (state.plan.endAge - state.plan.startAge));
+      pinchDone = true;
+    }
+  }, { passive: false });
+
+  canvas.addEventListener('touchend', () => { pinchStart = null; pinchDone = false; }, { passive: true });
+}
+
+// ─── 実績 ────────────────────────────────────────────────────────────────
+function renderActual() {
+  const rows = Object.entries(state.actual).sort()
+    .map(([k, v]) => `${k}：${yenFull(v)}`).join('<br>');
+  $('actualList').innerHTML = rows || '未記録';
+}
+
+// ─── 全再描画 ─────────────────────────────────────────────────────────────
+function renderAll() {
+  renderHome();
+  renderAssets();
+  renderPlan();
+  drawMain();
+  renderActual();
+  if ($('eventMemo')) $('eventMemo').value = state.events || '';
+  save();
+}
+
+// ─── タブ切替 ─────────────────────────────────────────────────────────────
+function setTab(tab) {
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + tab));
+  setTimeout(() => { Object.values(charts).forEach(c => c && c.resize && c.resize()); }, 60);
+}
+
+// ─── 初期化 ──────────────────────────────────────────────────────────────
+function init() {
+  load();
+
+  // タブ
+  document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
+
+  // 資産追加
+  $('addAssetBtn').addEventListener('click', addAsset);
+
+  // グラフ切替
+  $('viewYear').addEventListener('click',  () => setView('year'));
+  $('viewMonth').addEventListener('click', () => setView('month'));
+
+  // 計画フォーム（数値フィールド）
+  ['startAge','goalAge','endAge','goal','monthly','bonus','bonusCount'].forEach(k => {
+    const el = $(k);
+    if (!el) return;
+    el.addEventListener('change', e => {
+      state.plan[k] = parseFloat(e.target.value) || 0;
+      renderAll();
+    });
+  });
+
+  // イベントメモ
+  $('eventMemo').addEventListener('input', e => { state.events = e.target.value; save(); });
+
+  // 実績保存
+  $('saveActual').addEventListener('click', () => {
+    const month  = $('actMonth').value;
+    const amount = parseYenRaw($('actAmount').value);
+    if (!month) { toast('年月を選択してください'); return; }
+    state.actual[month] = amount;
+    save();
+    renderActual();
+    toast('実績を保存しました');
+  });
+
+  // JSON出力
+  $('exportBtn').addEventListener('click', () => {
+    $('backupBox').value = JSON.stringify(state, null, 2);
+    toast('JSONを出力しました');
+  });
+
+  // JSON読込
+  $('importBtn').addEventListener('click', () => {
+    try {
+      state = migrate(JSON.parse($('backupBox').value));
+      save();
+      renderAll();
+      toast('読み込みました');
+    } catch (e) {
+      toast('JSONの形式を確認してください');
+    }
+  });
+
+  // 初期年月
+  $('actMonth').value = ym(START_Y, START_M);
+
+  renderAll();
+}
+
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
