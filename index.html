@@ -3,22 +3,74 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>ASSET MANAGER PRO V7.6.2</title>
+<title>ASSET MANAGER PRO V7.6.3</title>
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="資産1億円" />
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+window.addEventListener('error', function(e){
+  const src = e && e.target && e.target.src;
+  if (src && src.includes('chart')) window.__chartLoadFailed = true;
+}, true);
+</script>
 <style>
 :root{--bg:#07101f;--card:#17213a;--card2:#10192d;--line:#2b3c68;--text:#f3f7ff;--muted:#9aa8c6;--blue:#4f8ef7;--green:#38d99b;--yellow:#f5a316;--red:#ef4444;--shadow:0 20px 60px rgba(0,0,0,.35);--radius:26px;font-family:-apple-system,BlinkMacSystemFont,'Noto Sans JP',system-ui,sans-serif}*{box-sizing:border-box}html,body{margin:0;background:linear-gradient(180deg,#0b1224,#050b15 65%);color:var(--text);min-height:100%;-webkit-tap-highlight-color:transparent}button,input,select,textarea{font:inherit}.app{max-width:820px;margin:0 auto;padding:28px 22px 56px}.hero{text-align:center;padding:30px 0 18px}.label{letter-spacing:.28em;color:#a9b4cf;font-size:14px}.hero h1{font-size:clamp(36px,8vw,58px);line-height:1.12;margin:12px 0 10px}.hero h1 span{color:var(--blue)}.sub{color:var(--muted);font-size:17px}
 /* タブ：8個対応で2行 */
 .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:#080f1f;padding:10px;margin:10px 0 24px;border-radius:18px}.tab{border:1px solid var(--line);background:#111a30;color:#aab5cf;border-radius:18px;padding:14px 6px;font-weight:800;font-size:14px;min-height:48px;cursor:pointer}.tab.active{background:linear-gradient(135deg,#4f8ef7,#67a3ff);color:white}
-.panel{display:none}.panel.active{display:block}.card{background:linear-gradient(180deg,#1a2540,#111a30);border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin:18px 0;box-shadow:var(--shadow)}.title{font-size:24px;font-weight:900;margin-bottom:10px}.desc{color:var(--muted);line-height:1.75}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.kpi{text-align:center}.kpi-label{color:var(--muted);font-size:14px;margin-bottom:12px}.kpi-num{font-size:28px;font-weight:900}.accent{color:var(--blue)}.green{color:var(--green)}.yellow{color:var(--yellow)}.input{width:100%;background:#0b1326;border:1px solid var(--line);border-radius:14px;color:var(--text);padding:12px 14px;outline:none}.input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(79,142,247,.18)}.btn{border:0;border-radius:18px;padding:14px 18px;font-weight:900;color:white;background:linear-gradient(135deg,#4f8ef7,#67a3ff);min-height:52px;cursor:pointer}.btn.secondary{background:#0b1326;border:1px solid var(--line);color:var(--text)}.btn.red{background:linear-gradient(135deg,#ef4444,#dc2626)}.btn.ghost{background:#0b1326;border:1px dashed var(--blue);color:var(--blue)}.assetList{display:flex;flex-direction:column;gap:12px}.assetCard{display:grid;grid-template-columns:34px 1fr 40px;grid-template-areas:"drag name del" "drag fields del";gap:8px;align-items:start;background:#111a30;border:1px solid var(--line);border-radius:22px;padding:12px}.dragHandle{grid-area:drag;min-height:82px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.035);color:#91a3c9;display:flex;align-items:center;justify-content:center;font-size:19px;user-select:none;touch-action:none;cursor:grab}.assetName{grid-area:name}.assetFields{grid-area:fields;display:grid;grid-template-columns:1.12fr .78fr .95fr;gap:8px}.field label,.assetName label{display:block;color:#aeb8d4;font-size:11px;font-weight:900;margin-bottom:4px}.field .input,.assetName .input{min-height:40px;padding:8px 10px;font-size:15px}.unit{font-size:10px;color:#7f8cac;margin-top:3px;line-height:1.25}.delBtn{grid-area:del;width:38px;height:38px;min-height:38px;border-radius:12px;padding:0;font-size:17px;align-self:start}.addAssetBtn{width:100%;margin-top:12px;min-height:58px;position:relative;z-index:10;touch-action:manipulation}.assetCard.dragging{opacity:.55}.assetCard.dragOver{outline:2px solid rgba(79,142,247,.8)}.moveBtns{display:flex;gap:6px;margin-top:6px}.moveBtns button{flex:1;min-height:32px;padding:4px;border-radius:10px}.chartBox{height:300px;position:relative}.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#0b1326;border:1px solid var(--line);color:white;border-radius:999px;padding:12px 18px;opacity:0;pointer-events:none;transition:.25s;z-index:9999}.toast.show{opacity:1}.status{display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:center}.emoji{font-size:30px}.bar{height:12px;background:#27345f;border-radius:99px;overflow:hidden;margin-top:14px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--green));width:0}.small{font-size:13px;color:var(--muted);line-height:1.6}.footer{color:var(--muted);font-size:13px;line-height:1.7;margin:24px 4px}.plan-label{display:block;color:#aeb8d4;font-size:12px;font-weight:900;margin-bottom:4px;margin-top:12px}@media(max-width:560px){.app{padding:22px 16px 52px}.tabs{gap:6px}.tab{font-size:13px;padding:11px 4px;min-height:44px}.grid2{gap:12px}.card{padding:20px}.assetCard{grid-template-columns:30px 1fr 38px;padding:10px}.assetFields{grid-template-columns:1.08fr .78fr .92fr;gap:7px}.hero h1{font-size:42px}.chartBox{height:270px}.field label,.assetName label{font-size:10.5px}.field .input,.assetName .input{font-size:14px;padding:8px}}
+.panel{display:none}.panel.active{display:block}.card{background:linear-gradient(180deg,#1a2540,#111a30);border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin:18px 0;box-shadow:var(--shadow)}.title{font-size:24px;font-weight:900;margin-bottom:10px}.desc{color:var(--muted);line-height:1.75}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.kpi{text-align:center}.kpi-label{color:var(--muted);font-size:14px;margin-bottom:12px}.kpi-num{font-size:28px;font-weight:900}.accent{color:var(--blue)}.green{color:var(--green)}.yellow{color:var(--yellow)}.input{width:100%;background:#0b1326;border:1px solid var(--line);border-radius:14px;color:var(--text);padding:12px 14px;outline:none}.input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(79,142,247,.18)}.btn{border:0;border-radius:18px;padding:14px 18px;font-weight:900;color:white;background:linear-gradient(135deg,#4f8ef7,#67a3ff);min-height:52px;cursor:pointer}.btn.secondary{background:#0b1326;border:1px solid var(--line);color:var(--text)}.btn.red{background:linear-gradient(135deg,#ef4444,#dc2626)}.btn.ghost{background:#0b1326;border:1px dashed var(--blue);color:var(--blue)}/* ── 資産リスト ─────────────────────────────── */
+.assetList{display:flex;flex-direction:column;gap:8px}
+/* 1行レイアウト: ☰ | 資産名 | 保有額 | リターン | 口座 | ↑↓ | × */
+.assetCard{
+  display:grid;
+  grid-template-columns:28px 1.8fr 1.5fr 80px 90px 60px 34px;
+  gap:6px;
+  align-items:end;
+  background:#111a30;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:10px 10px 10px 8px;
+}
+.dragHandle{
+  width:28px;height:100%;min-height:58px;
+  border:1px solid var(--line);border-radius:10px;
+  background:rgba(255,255,255,.035);color:#91a3c9;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;user-select:none;touch-action:none;cursor:grab;
+  align-self:stretch;
+}
+/* 各カラムのラベル＋input */
+.ac-col{display:flex;flex-direction:column;gap:3px}
+.ac-col label{color:#aeb8d4;font-size:10px;font-weight:900;white-space:nowrap;line-height:1}
+.ac-col .input{min-height:36px;padding:6px 8px;font-size:14px;border-radius:10px}
+.unit{font-size:9px;color:#7f8cac;margin-top:2px;line-height:1.2}
+/* ↑↓ボタン */
+.moveBtns{display:flex;flex-direction:column;gap:4px;align-self:end}
+.moveBtns button{width:100%;min-height:26px;padding:2px 4px;border-radius:8px;font-size:12px}
+/* ×ボタン */
+.delBtn{width:34px;height:34px;min-height:34px;border-radius:10px;padding:0;font-size:15px;align-self:end}
+.addAssetBtn{width:100%;margin-top:10px;min-height:52px;position:relative;z-index:10;touch-action:manipulation}
+.assetCard.dragging{opacity:.55}
+.assetCard.dragOver{outline:2px solid rgba(79,142,247,.8)}
+.assetCard.touchDragging{opacity:.88;outline:2px solid rgba(79,142,247,.9)}
+.chartFallback{display:none;align-items:center;justify-content:center;height:100%;padding:18px;text-align:center;color:var(--muted);line-height:1.7;background:#0b1326;border:1px dashed var(--line);border-radius:18px}
+/* モバイル: 2行に折り返し */
+@media(max-width:620px){
+  .assetCard{grid-template-columns:26px 1fr 34px;grid-template-rows:auto auto;
+    grid-template-areas:"drag row1 del" "drag row2 del";gap:5px;padding:8px}
+  .ac-row1{grid-area:row1;display:grid;grid-template-columns:1fr;gap:5px}
+  .ac-row2{grid-area:row2;display:grid;grid-template-columns:1.3fr 80px 90px 52px;gap:5px}
+  .dragHandle{grid-area:drag;min-height:unset;align-self:stretch}
+  .delBtn{grid-area:del;align-self:start}
+  .moveBtns{flex-direction:row}
+  .moveBtns button{min-height:28px}
+}.chartBox{height:300px;position:relative}.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#0b1326;border:1px solid var(--line);color:white;border-radius:999px;padding:12px 18px;opacity:0;pointer-events:none;transition:.25s;z-index:9999}.toast.show{opacity:1}.status{display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:center}.emoji{font-size:30px}.bar{height:12px;background:#27345f;border-radius:99px;overflow:hidden;margin-top:14px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--green));width:0}.small{font-size:13px;color:var(--muted);line-height:1.6}.footer{color:var(--muted);font-size:13px;line-height:1.7;margin:24px 4px}.plan-label{display:block;color:#aeb8d4;font-size:12px;font-weight:900;margin-bottom:4px;margin-top:12px}@media(max-width:560px){.app{padding:22px 16px 52px}.tabs{gap:6px}.tab{font-size:13px;padding:11px 4px;min-height:44px}.grid2{gap:12px}.card{padding:18px}.hero h1{font-size:42px}.chartBox{height:270px}}
 </style>
 </head>
 <body>
 <div class="app">
 <header class="hero">
-  <div class="label">ASSET MANAGER PRO V7.6.2</div>
+  <div class="label">ASSET MANAGER PRO V7.6.3</div>
   <h1>45歳から<span>1億円</span>を本気で狙う</h1>
   <div id="heroSub" class="sub">600万円・年間240万円・60歳1億円プラン</div>
 </header>
@@ -251,9 +303,15 @@ function load() {
   try { state = migrate(JSON.parse(localStorage.getItem(KEY)) || def()); }
   catch (e) { state = def(); }
 }
-function save() {
-  try { localStorage.setItem(KEY, JSON.stringify(state)); }
-  catch (e) { /* storage unavailable */ }
+function save(showMessage = false) {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(state));
+    return true;
+  } catch (e) {
+    console.error('保存に失敗しました', e);
+    if (showMessage) toast('保存できません。Safariの容量/設定を確認してください');
+    return false;
+  }
 }
 
 // ─── トースト ─────────────────────────────────────────────────────────────
@@ -349,37 +407,42 @@ function renderAssets() {
   $('assetList').innerHTML = state.assets.map((a, idx) => `
     <div class="assetCard" draggable="true" data-id="${a.id}">
       <div class="dragHandle">☰</div>
-      <div class="assetName">
+      <!-- 資産名（PC:col, SP:row1） -->
+      <div class="ac-col ac-row1">
         <label>資産名・銘柄名</label>
         <input class="input" value="${escapeHtml(a.name)}"
                onchange="updAsset('${a.id}','name',this.value)">
       </div>
-      <div class="assetFields">
-        <div class="field">
-          <label>保有額</label>
-          <input class="input" inputmode="numeric"
-                 value="${manToYenStr(a.amount)}"
-                 onchange="updAssetAmount('${a.id}',this)"
-                 onfocus="this.select()">
-          <div class="unit">1円単位</div>
-        </div>
-        <div class="field">
-          <label>期待リターン</label>
-          <input class="input" type="number" step="0.1" value="${a.rate}"
-                 onchange="updAsset('${a.id}','rate',this.value)">
-          <div class="unit">年率％</div>
-        </div>
-        <div class="field">
-          <label>口座区分</label>
-          <input class="input" value="${escapeHtml(a.account)}"
-                 onchange="updAsset('${a.id}','account',this.value)">
-          <div class="unit">NISA/特定/iDeCo</div>
-        </div>
-        <div class="moveBtns">
-          <button type="button" class="btn secondary" onclick="moveAsset(${idx},${idx-1})">↑</button>
-          <button type="button" class="btn secondary" onclick="moveAsset(${idx},${idx+1})">↓</button>
-        </div>
+      <!-- 保有額 -->
+      <div class="ac-col ac-row2">
+        <label>保有額</label>
+        <input class="input" inputmode="numeric"
+               value="${manToYenStr(a.amount)}"
+               oninput="updAssetAmount('${a.id}',this,false)"
+               onblur="updAssetAmount('${a.id}',this,true)"
+               onfocus="this.value=String(Math.round((+state.assets.find(x=>x.id==='${a.id}')?.amount||0)*10000));this.select()">
+        <div class="unit">1円単位</div>
       </div>
+      <!-- 期待リターン -->
+      <div class="ac-col ac-row2">
+        <label>リターン</label>
+        <input class="input" type="number" step="0.1" value="${a.rate}"
+               onchange="updAsset('${a.id}','rate',this.value)">
+        <div class="unit">年率％</div>
+      </div>
+      <!-- 口座区分 -->
+      <div class="ac-col ac-row2">
+        <label>口座</label>
+        <input class="input" value="${escapeHtml(a.account)}"
+               onchange="updAsset('${a.id}','account',this.value)">
+        <div class="unit">NISA/特定/iDeCo</div>
+      </div>
+      <!-- 並び替え -->
+      <div class="moveBtns ac-row2">
+        <button type="button" class="btn secondary" onclick="moveAsset(${idx},${idx-1})">↑</button>
+        <button type="button" class="btn secondary" onclick="moveAsset(${idx},${idx+1})">↓</button>
+      </div>
+      <!-- 削除 -->
       <button type="button" class="btn red delBtn" onclick="delAsset('${a.id}')">×</button>
     </div>`).join('');
 
@@ -389,14 +452,13 @@ function renderAssets() {
   setupDrag();
 }
 
-// 保有額の変更（イベントループ再発火を防ぐため blur 後に表示更新）
-function updAssetAmount(id, input) {
+// 保有額の入力中は数値だけを保存し、表示整形は blur 時だけ行う
+function updAssetAmount(id, input, format = false) {
   const a = state.assets.find(x => x.id === id);
   if (!a) return;
   a.amount = parseYenStr(input.value);
-  save();
-  // blur後に表示を更新（onchangeの再発火を避ける）
-  setTimeout(() => { input.value = manToYenStr(a.amount); }, 0);
+  save(true);
+  if (format) input.value = manToYenStr(a.amount);
   renderHome();
   $('assetTotal').textContent = yen(totalAsset());
   $('avgReturn').textContent  = pct(avgRate());
@@ -448,8 +510,14 @@ function moveAssetById(fromId, toId) {
 function setupDrag() {
   const cards = [...document.querySelectorAll('.assetCard[data-id]')];
   let dragging = null;
+
+  // PC向け: HTML5 Drag & Drop
   cards.forEach(card => {
-    card.addEventListener('dragstart', () => {
+    card.addEventListener('dragstart', e => {
+      if (e.target && e.target.closest && !e.target.closest('.dragHandle')) {
+        e.preventDefault();
+        return;
+      }
       dragging = card.dataset.id;
       card.classList.add('dragging');
     });
@@ -464,6 +532,41 @@ function setupDrag() {
       card.classList.remove('dragOver');
       moveAssetById(dragging, card.dataset.id);
     });
+  });
+
+  // iPhone向け: ☰を長押し/ドラッグして指を離した位置へ移動
+  const handles = [...document.querySelectorAll('.dragHandle')];
+  handles.forEach(handle => {
+    let activeId = null;
+    let overId = null;
+
+    handle.addEventListener('touchstart', e => {
+      const card = handle.closest('.assetCard');
+      if (!card) return;
+      activeId = card.dataset.id;
+      overId = activeId;
+      card.classList.add('touchDragging');
+    }, { passive: true });
+
+    handle.addEventListener('touchmove', e => {
+      if (!activeId || !e.touches || !e.touches[0]) return;
+      const t = e.touches[0];
+      const el = document.elementFromPoint(t.clientX, t.clientY);
+      const card = el && el.closest ? el.closest('.assetCard[data-id]') : null;
+      cards.forEach(c => c.classList.remove('dragOver'));
+      if (card && card.dataset.id !== activeId) {
+        overId = card.dataset.id;
+        card.classList.add('dragOver');
+      }
+      e.preventDefault();
+    }, { passive: false });
+
+    handle.addEventListener('touchend', () => {
+      cards.forEach(c => c.classList.remove('touchDragging', 'dragOver'));
+      if (activeId && overId && activeId !== overId) moveAssetById(activeId, overId);
+      activeId = null;
+      overId = null;
+    }, { passive: true });
   });
 }
 
@@ -565,9 +668,27 @@ function drawDonut() {
 }
 
 function makeChart(id, type, data, extra = {}) {
-  if (!window.Chart) return;
   const el = $(id);
   if (!el) return;
+  const box = el.parentElement;
+  const fallbackId = id + '-fallback';
+  let fallback = $(fallbackId);
+
+  if (!window.Chart) {
+    el.style.display = 'none';
+    if (!fallback && box) {
+      fallback = document.createElement('div');
+      fallback.id = fallbackId;
+      fallback.className = 'chartFallback';
+      fallback.textContent = 'グラフライブラリを読み込めませんでした。通信状況を確認して再読み込みしてください。入力・保存はそのまま使えます。';
+      box.appendChild(fallback);
+    }
+    if (fallback) fallback.style.display = 'flex';
+    return;
+  }
+
+  el.style.display = 'block';
+  if (fallback) fallback.style.display = 'none';
   if (charts[id]) charts[id].destroy();
   charts[id] = new Chart(el, {
     type,
@@ -684,7 +805,7 @@ function init() {
   $('importBtn').addEventListener('click', () => {
     try {
       state = migrate(JSON.parse($('backupBox').value));
-      save();
+      save(true);
       renderAll();
       toast('読み込みました');
     } catch (e) {
