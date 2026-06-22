@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PF連動型・資産1億円プランナー</title>
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="1億円プラン">
+<link rel="apple-touch-icon" href="https://via.placeholder.com/192/4f8ef7/FFFFFF?text=1B">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --card: #1e2333;
+    --card2: #181c27;
+    --border: #2a3050;
+    --accent: #4f8ef7;
+    --accent2: #34d399;
+    --warn: #f59e0b;
+    --danger: #ef4444;
+    --text: #e8ecf5;
+    --muted: #8892aa;
+    --mono: 'DM Mono', monospace;
+    --sans: 'Noto Sans JP', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding: 20px 14px 60px;
+    font-size: 14px;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; }
+
+  .header { text-align: center; margin-bottom: 20px; }
+  .header-label { font-size: 11px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+  .header h1 { font-size: clamp(22px, 5vw, 32px); font-weight: 700; line-height: 1.25; }
+  .header h1 span { color: var(--accent); }
+  .header-sub { margin-top: 6px; font-size: 12px; color: var(--muted); }
+
+  /* Tabs */
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 18px;
+    position: sticky;
+    top: 8px;
+    z-index: 10;
+    background: var(--bg);
+    padding: 4px 0;
+  }
+  .tab-btn {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 10px;
+    padding: 12px 4px;
+    font-size: 11px;
+    font-family: var(--sans);
+    text-align: center;
+    cursor: pointer;
+    line-height: 1.3;
+    transition: all 0.15s;
+  }
+  .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 700; }
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .card-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .card-desc { font-size: 12px; color: var(--muted); margin-bottom: 14px; line-height: 1.6; }
+
+  /* Holdings Table Header */
+  .holding-header {
+    display: flex;
+    font-size: 11px;
+    color: var(--muted);
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+
+  /* Holdings Rows */
+  .holding-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .holding-row:last-child { border-bottom: none; }
+  .holding-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .holding-name {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 13px;
+    font-family: var(--sans);
+    outline: none;
+    min-width: 0;
+  }
+  .holding-input-wrap { display: flex; align-items: center; gap: 2px; }
+  .holding-input {
+    width: 75px;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    text-align: right;
+    padding: 6px;
+    outline: none;
+  }
+  .holding-input:focus { border-color: var(--accent); background: var(--card); }
+  .holding-unit { font-size: 10px; color: var(--muted); width: 14px; text-align: left; }
+  .holding-del {
+    background: none; border: none; color: var(--muted); font-size: 18px;
+    cursor: pointer; padding: 0 4px; flex-shrink: 0;
+  }
+  .add-row-btn {
+    width: 100%;
+    margin-top: 10px;
+    background: var(--card2);
+    border: 1px dashed var(--border);
+    color: var(--accent);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 13px;
+    font-family: var(--sans);
+    cursor: pointer;
+  }
+  .holding-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .holding-total .val { font-family: var(--mono); color: var(--text); font-weight: 700; }
+  .holding-total .pf-rate-val { color: var(--accent); font-weight: 700; font-size: 15px; }
+
+  .donut-wrap { display: flex; align-items: center; gap: 16px; margin-top: 14px; }
+  .donut-canvas-box { width: 110px; height: 110px; flex-shrink: 0; }
+  .legend { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+  .legend-item .pct { margin-left: auto; font-family: var(--mono); color: var(--text); }
+
+  /* Sliders */
+  .field { margin-bottom: 20px; }
+  .field:last-child { margin-bottom: 0; }
+  .field-label { font-size: 12px; color: var(--muted); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .field-label .field-val { font-family: var(--mono); color: var(--accent); font-weight: 700; font-size: 14px; }
+  
+  .slider-ctrl { display: flex; align-items: center; gap: 12px; }
+  .slider-btn {
+    width: 36px; height: 36px; background: var(--card2); border: 1px solid var(--border);
+    color: var(--text); display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: bold; border-radius: 50%; cursor: pointer; user-select: none;
+  }
+  .slider-btn:active { background: var(--border); }
+  
+  input[type="range"] {
+    -webkit-appearance: none; flex: 1; height: 6px;
+    background: var(--border); border-radius: 3px; outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--accent); cursor: pointer; box-shadow: 0 0 8px rgba(79,142,247,0.6);
+  }
+
+  .num-input {
+    width: 100%; background: var(--card2); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text); font-family: var(--mono); font-size: 15px; padding: 12px; outline: none;
+  }
+  .num-input:focus { border-color: var(--accent); background: var(--card); }
+
+  .month-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+  .month-chip {
+    background: var(--card2); border: 1px solid var(--border); color: var(--muted);
+    border-radius: 8px; padding: 10px 0; font-size: 12px; font-family: var(--mono); text-align: center; cursor: pointer;
+  }
+  .month-chip.active { background: rgba(245,158,11,0.15); border-color: var(--warn); color: var(--warn); font-weight: 700; }
+
+  /* Year table */
+  .year-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .year-table th {
+    text-align: right; color: var(--muted); font-weight: 400; font-size: 10px;
+    letter-spacing: 0.05em; padding: 8px 4px; border-bottom: 1px solid var(--border);
+  }
+  .year-table th:first-child, .year-table td:first-child { text-align: left; }
+  .year-table td { text-align: right; padding: 8px 4px; border-bottom: 1px solid var(--border); font-family: var(--mono); }
+  .year-table tr:last-child td { border-bottom: none; }
+  .year-override-input {
+    width: 70px; background: var(--card2); border: 1px solid var(--accent);
+    border-radius: 6px; color: var(--accent); font-family: var(--mono); font-size: 12px;
+    text-align: right; padding: 4px 6px; outline: none;
+  }
+  .override-toggle { width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent); }
+
+  /* KPI */
+  .kpi-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
+  .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; text-align: center; }
+  .kpi.goal { border-color: var(--accent2); background: linear-gradient(135deg, #1e2333 70%, #0d2e22); }
+  .kpi.warn { border-color: var(--warn); background: linear-gradient(135deg, #1e2333 70%, #2d2010); }
+  .kpi-label { font-size: 10px; letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; }
+  .kpi-number { font-family: var(--mono); font-size: clamp(15px, 4vw, 19px); font-weight: 500; }
+  .kpi.goal .kpi-number { color: var(--accent2); font-weight: 700; }
+  .kpi.warn .kpi-number { color: var(--warn); }
+  .kpi-number.accent { color: var(--accent); }
+  .kpi-number.danger { color: var(--danger); }
+
+  /* Progress Gap Bar */
+  .gap-bar-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-top: 8px; }
+  .gap-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .gap-bar-fill.over { background: linear-gradient(90deg, var(--accent2), #22c55e); }
+  .gap-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+
+  /* Actual Form */
+  .actual-form-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .actual-form-row > div { flex: 1; }
+  .actual-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .save-btn {
+    width: 100%; background: var(--accent); color: #fff; border: none;
+    border-radius: 8px; padding: 14px; font-size: 14px; font-weight: 700;
+    font-family: var(--sans); cursor: pointer; margin-top: 6px;
+  }
+  .save-btn:active { opacity: 0.8; }
+
+  /* Status Banner */
+  .status-banner {
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--card2); border-left: 4px solid var(--accent);
+    padding: 12px 14px; border-radius: 0 8px 8px 0; margin-bottom: 14px;
+  }
+  .status-banner.ahead { border-left-color: var(--accent2); }
+  .status-banner.behind { border-left-color: var(--danger); }
+  .status-title { font-size: 12px; color: var(--muted); }
+  .status-val { font-family: var(--mono); font-size: 16px; font-weight: 700; }
+  .status-val.ahead { color: var(--accent2); }
+  .status-val.behind { color: var(--danger); }
+
+  .log-row {
+    display: flex; align-items: center; gap: 8px; padding: 12px 0;
+    border-bottom: 1px solid var(--border); font-size: 13px;
+  }
+  .log-row:last-child { border-bottom: none; }
+  .log-month { font-family: var(--mono); color: var(--accent); width: 68px; flex-shrink: 0; }
+  .log-vals { flex: 1; color: var(--text); }
+  .log-vals .sub { color: var(--muted); font-size: 11px; margin-top: 2px; }
+  .log-diff { font-family: var(--mono); font-size: 13px; width: 85px; text-align: right; flex-shrink: 0; }
+  .log-diff.pos { color: var(--accent2); }
+  .log-diff.neg { color: var(--danger); }
+  .log-del { background: none; border: none; color: var(--muted); font-size: 18px; cursor: pointer; flex-shrink: 0; padding: 0 4px; }
+
+  .empty-state { text-align: center; color: var(--muted); font-size: 12px; padding: 24px 0; }
+  .footer-note { font-size: 11px; color: var(--muted); line-height: 1.7; padding: 14px 0; border-top: 1px solid var(--border); margin-top: 10px; }
+  
+  .save-toast {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--accent2); color: #042; padding: 10px 20px; border-radius: 20px;
+    font-size: 12px; font-weight: 700; opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 100;
+  }
+  .save-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body onclick="">
+<div class="wrap">
+
+  <div class="header">
+    <div class="header-label">Asset Growth Planner v3.0</div>
+    <h1>45歳から<span>1億円</span>を目指す</h1>
+    <div class="header-sub" id="header-sub">読み込み中...</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab-btn active" data-tab="holdings">資産内訳</div>
+    <div class="tab-btn" data-tab="plan">積立プラン</div>
+    <div class="tab-btn" data-tab="sim">シミュレーション</div>
+    <div class="tab-btn" data-tab="actual">実績記録</div>
+  </div>
+
+  <div class="panel active" id="panel-holdings">
+    <div class="card">
+      <div class="card-title">保有ポートフォリオ設定</div>
+      <div class="card-desc">銘柄ごとの現在高と想定リターン(年率)を設定します。比率に応じた平均リターンが自動算出されます。</div>
+      
+      <div class="holding-header">
+        <div style="flex:1; text-align:left; padding-left:14px;">銘柄名</div>
+        <div style="width:91px;">現在の保有額</div>
+        <div style="width:91px;">想定リターン</div>
+        <div style="width:26px;"></div>
+      </div>
+      
+      <div id="holdings-list"></div>
+      <button class="add-row-btn" id="add-holding">＋ 新しい銘柄を追加</button>
+      
+      <div class="holding-total">
+        <span>資産総額: <span class="val" id="holdings-total-val">0万円</span></span>
+        <span>PF平均リターン: <span class="pf-rate-val" id="holdings-avg-rate">0.0%</span></span>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="section-title">アセット構成比</div>
+      <div class="donut-wrap">
+        <div class="donut-canvas-box"><canvas id="donut-chart"></canvas></div>
+        <div class="legend" id="donut-legend"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-plan">
+    <div class="card">
+      <div class="card-title">毎月の積立ベース</div>
+      <div class="card-desc">毎月積み立てる基本額と、その積立能力の年次上昇率を設定します。</div>
+      <div class="field">
+        <div class="field-label">月次基本積立額 <span class="field-val" id="v-monthly">22万円</span></div>
+        <div class="slider-ctrl">
+          <div class="slider-btn" onclick="stepSlider('r-monthly', -1)">-</div>
+          <input type="range" id="r-monthly" min="0" max="50" step="1" value="22">
+          <div class="slider-btn" onclick="stepSlider('r-monthly', 1)">+</div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">年ごとの増加率 <span class="field-val" id="v-growth">0.0%/年</span></div>
+        <div class="slider-ctrl">
+          <div class="slider-btn" onclick="stepSlider('r-growth', -0.5)">-</div>
+          <input type="range" id="r-growth" min="0" max="10" step="0.5" value="0">
+          <div class="slider-btn" onclick="stepSlider('r-growth', 0.5)">+</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">ボーナス月の上乗せ</div>
+      <div class="month-grid" id="month-grid"></div>
+      <div class="field" style="margin-top:18px;">
+        <div class="field-label">ボーナス上乗せ額 <span class="field-val" id="v-bonus">0万円</span></div>
+        <div class="slider-ctrl">
+          <div class="slider-btn" onclick="stepSlider('r-bonus', -5)">-</div>
+          <input type="range" id="r-bonus" min="0" max="150" step="5" value="0">
+          <div class="slider-btn" onclick="stepSlider('r-bonus', 5)">+</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">年別 積立計画（45〜59歳）</div>
+      <table class="year-table">
+        <thead><tr><th>年齢</th><th>個別調整</th><th>年間積立額</th></tr></thead>
+        <tbody id="year-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-sim">
+    <div class="card" style="padding:12px 16px; background:var(--card2); border-color:var(--accent);">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:12px; color:var(--muted);">ポートフォリオ連動 適用リターン</span>
+        <span style="font-family:var(--mono); color:var(--accent); font-weight:700; font-size:16px;" id="sim-applied-rate">0.0%</span>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi goal">
+        <div class="kpi-label">60歳時 予測資産</div>
+        <div class="kpi-number" id="kpi-final">—</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">積立総額（15年）</div>
+        <div class="kpi-number accent" id="kpi-invested">—</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">運用益（複利効果）</div>
+        <div class="kpi-number accent" id="kpi-gain">—</div>
+      </div>
+      <div class="kpi warn">
+        <div class="kpi-label">目標との差額</div>
+        <div class="kpi-number" id="kpi-gap">—</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="gap-bar-label"><span>0円</span><span id="bar-label">達成率</span><span>1億円</span></div>
+      <div class="gap-bar-track"><div class="gap-bar-fill" id="gap-bar" style="width:0%"></div></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">資産推移シミュレーション（月次・万円）</div>
+      <canvas id="chart" height="220"></canvas>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-actual">
+    <div class="status-banner" id="current-status-banner">
+      <div>
+        <div class="status-title">現時点の想定ターゲットに対する達成状況</div>
+        <div style="font-size:11px; color:var(--muted); margin-top:2px;" id="status-target-desc">プラン想定額: —</div>
+      </div>
+      <div class="status-val" id="status-gap-val">—</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">今月の実績を記録</div>
+      <div class="actual-form-row">
+        <div>
+          <div class="actual-label">対象月</div>
+          <input type="month" class="num-input" id="input-month">
+        </div>
+      </div>
+      <div class="actual-form-row">
+        <div>
+          <div class="actual-label">月末 資産評価額（万円）</div>
+          <input type="number" pattern="[0-9]*" inputmode="numeric" class="num-input select-all" id="input-asset" placeholder="例: 650">
+        </div>
+        <div>
+          <div class="actual-label">今月の積立額（万円）</div>
+          <input type="number" pattern="[0-9]*" inputmode="numeric" class="num-input select-all" id="input-contrib" placeholder="例: 22">
+        </div>
+      </div>
+      <button class="save-btn" id="save-actual">この月の実績を保存</button>
+    </div>
+
+    <div class="card">
+      <div class="section-title">目標推移 vs 現実実績</div>
+      <canvas id="actual-chart" height="220"></canvas>
+    </div>
+
+    <div class="card">
+      <div class="section-title">記録履歴</div>
+      <div id="log-list"><div class="loading-text">読み込み中...</div></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    ※ 資産内訳の各銘柄リターンから「加重平均リターン」を算出し、シナリオ予測に適用しています。データは全てブラウザ（localStorage）に自動保存されます。
+  </div>
+</div>
+
+<div class="save-toast" id="toast">保存しました</div>
+
+<script>
+const CATEGORY_COLORS = {
+  'S&P500株式': '#4f8ef7', 'NASDAQ株式': '#8b5cf6', 'FANG+株式': '#ec4899',
+  'Neo宇宙開発株式': '#06b6d4', 'ゴールド': '#f59e0b', 'iDeCo（オルカン）': '#34d399',
+};
+const DEFAULT_COLORS = ['#4f8ef7','#8b5cf6','#ec4899','#06b6d4','#f59e0b','#34d399','#f472b6','#22d3ee'];
+
+const START_AGE = 45;
+const END_AGE = 60;
+const YEARS = END_AGE - START_AGE; 
+const NOW = new Date();
+const START_YM = { y: NOW.getFullYear(), m: NOW.getMonth() + 1 }; // シミュレーション開始月
+
+let holdings = [];
+let plan = { monthlyBase: 22, annualGrowth: 0, bonusMonths: [], bonusAmount: 0, overrides: {} };
+let actuals = {}; 
+let donutChart, mainChart, actualChart;
+
+function uid() { return 'h' + Math.random().toString(36).slice(2, 9); }
+function fmt(val) {
+  const sign = val < 0 ? '-' : '';
+  const abs = Math.abs(val);
+  if (abs >= 10000) return sign + (abs / 10000).toFixed(2) + '億円';
+  return sign + Math.round(abs).toLocaleString('ja-JP') + '万円';
+}
+function fmtDiff(val) { return (val >= 0 ? '+' : '') + fmt(val); }
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+function stepSlider(id, step) {
+  const el = document.getElementById(id);
+  const newVal = parseFloat(el.value) + step;
+  if (newVal >= parseFloat(el.min) && newVal <= parseFloat(el.max)) {
+    el.value = newVal;
+    el.dispatchEvent(new Event('input'));
+  }
+}
+
+function setupInputHelpers() {
+  document.querySelectorAll('.select-all').forEach(input => {
+    input.addEventListener('focus', function() { setTimeout(() => this.select(), 50); });
+  });
+}
+
+// 画面余白タップでキーボードを閉じる
+document.body.addEventListener('click', function(e) {
+  if (!e.target.closest('input') && !e.target.closest('button') && !e.target.closest('.month-chip') && !e.target.closest('.slider-btn')) {
+    document.activeElement.blur();
+  }
+});
+
+/* ---------- LOGIC: PF加重平均リターン計算 ---------- */
+function calcAvgReturn() {
+  const total = holdings.reduce((s, h) => s + (h.amount || 0), 0);
+  if (total === 0) return 7.0; // デフォルト値
+  const weightedSum = holdings.reduce((s, h) => s + ((h.amount || 0) * (h.rate || 0)), 0);
+  return weightedSum / total;
+}
+
+/* ---------- STORAGE ---------- */
+function loadAll() {
+  try {
+    const h = localStorage.getItem('holdings-v3');
+    holdings = h ? JSON.parse(h) : defaultHoldings();
+  } catch (e) { holdings = defaultHoldings(); }
+
+  try {
+    const p = localStorage.getItem('plan-v3');
+    if (p) plan = { ...plan, ...JSON.parse(p) };
+  } catch (e) { }
+
+  try {
+    const a = localStorage.getItem('actuals-v3');
+    actuals = a ? JSON.parse(a) : {};
+  } catch (e) { actuals = {}; }
+}
+function saveHoldings() { localStorage.setItem('holdings-v3', JSON.stringify(holdings)); }
+function savePlan() { localStorage.setItem('plan-v3', JSON.stringify(plan)); }
+function saveActuals() { localStorage.setItem('actuals-v3', JSON.stringify(actuals)); }
+
+function defaultHoldings() {
+  return [
+    { id: uid(), name: 'S&P500株式', amount: 600, rate: 7.0 },
+    { id: uid(), name: 'NASDAQ株式', amount: 0, rate: 9.0 },
+    { id: uid(), name: 'FANG+株式', amount: 0, rate: 11.0 },
+    { id: uid(), name: 'ゴールド', amount: 0, rate: 4.0 },
+    { id: uid(), name: 'iDeCo（オルカン）', amount: 0, rate: 6.0 },
+  ];
+}
+
+/* ---------- HOLDINGS TAB ---------- */
+function renderHoldings() {
+  const list = document.getElementById('holdings-list');
+  list.innerHTML = holdings.map((h, i) => {
+    const color = CATEGORY_COLORS[h.name] || DEFAULT_COLORS[i % DEFAULT_COLORS.length];
+    return `<div class="holding-row" data-id="${h.id}">
+      <span class="holding-dot" style="background:${color}"></span>
+      <input class="holding-name" value="${h.name}" data-field="name">
+      
+      <div class="holding-input-wrap">
+        <input class="holding-input select-all" type="number" pattern="[0-9]*" inputmode="numeric" value="${h.amount}" data-field="amount">
+        <span class="holding-unit">万</span>
+      </div>
+      
+      <div class="holding-input-wrap">
+        <input class="holding-input select-all" type="number" step="0.1" value="${h.rate}" data-field="rate">
+        <span class="holding-unit">%</span>
+      </div>
+      
+      <button class="holding-del" data-del="${h.id}">×</button>
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('input[data-field]').forEach(input => {
+    input.addEventListener('input', (e) => {
+      const id = e.target.closest('.holding-row').dataset.id;
+      const h = holdings.find(x => x.id === id);
+      const field = e.target.dataset.field;
+      if (field === 'name') h[field] = e.target.value;
+      else h[field] = parseFloat(e.target.value) || 0;
+      
+      saveHoldings();
+      updateHoldingsSummary();
+      renderDonut();
+      renderAll();
+    });
+  });
+
+  list.querySelectorAll('[data-del]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      holdings = holdings.filter(h => h.id !== e.target.dataset.del);
+      saveHoldings();
+      renderHoldings();
+      updateHoldingsSummary();
+      renderDonut();
+      renderAll();
+    });
+  });
+  setupInputHelpers();
+  updateHoldingsSummary();
+}
+
+function updateHoldingsSummary() {
+  const total = holdings.reduce((s, h) => s + (h.amount || 0), 0);
+  const avgRate = calcAvgReturn();
+  
+  document.getElementById('holdings-total-val').textContent = fmt(total);
+  document.getElementById('holdings-avg-rate').textContent = avgRate.toFixed(2) + '%';
+  document.getElementById('sim-applied-rate').textContent = avgRate.toFixed(2) + '%';
+  document.getElementById('header-sub').textContent = `現在資産 ${fmt(total)} (PFリターン ${avgRate.toFixed(1)}%) ／ 目標 1億円`;
+}
+
+function renderDonut() {
+  const total = holdings.reduce((s, h) => s + (h.amount || 0), 0);
+  const ctx = document.getElementById('donut-chart');
+  const legend = document.getElementById('donut-legend');
+  const nonZero = holdings.filter(h => h.amount > 0);
+
+  if (donutChart) donutChart.destroy();
+  if (nonZero.length === 0) {
+    legend.innerHTML = '<div class="empty-state" style="padding:0;">保有額を入力すると構成比が表示されます</div>';
+    donutChart = new Chart(ctx, { type: 'doughnut', data: { labels: ['未入力'], datasets: [{ data: [1], backgroundColor: ['#2a3050'], borderWidth: 0 }] }, options: { plugins: { legend: { display: false } }, cutout: '68%' } });
+    return;
+  }
+
+  const colors = nonZero.map((h, i) => CATEGORY_COLORS[h.name] || DEFAULT_COLORS[i % DEFAULT_COLORS.length]);
+  donutChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: { labels: nonZero.map(h => h.name), datasets: [{ data: nonZero.map(h => h.amount), backgroundColor: colors, borderWidth: 2, borderColor: '#1e2333' }] },
+    options: { plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${c.label}: ${fmt(c.raw)} (${hReturnStr(c.label)})` } } }, cutout: '68%' }
+  });
+
+  function hReturnStr(name) { const target = holdings.find(x => x.name === name); return target ? target.rate + '%' : ''; }
+
+  legend.innerHTML = nonZero.map((h, i) => {
+    const pct = total > 0 ? (h.amount / total * 100).toFixed(1) : '0.0';
+    return `<div class="legend-item"><span class="holding-dot" style="background:${colors[i]}"></span>${h.name} (${h.rate}%)<span class="pct">${pct}%</span></div>`;
+  }).join('');
+}
+
+document.getElementById('add-holding').addEventListener('click', () => {
+  holdings.push({ id: uid(), name: '新規銘柄', amount: 0, rate: 5.0 });
+  saveHoldings(); renderHoldings(); renderDonut(); renderAll();
+});
+
+/* ---------- PLAN TAB ---------- */
+function renderMonthGrid() {
+  const grid = document.getElementById('month-grid');
+  grid.innerHTML = Array.from({ length: 12 }, (_, i) => i + 1).map(m =>
+    `<div class="month-chip ${plan.bonusMonths.includes(m) ? 'active' : ''}" data-month="${m}">${m}月</div>`
+  ).join('');
+  grid.querySelectorAll('.month-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const m = parseInt(chip.dataset.month);
+      if (plan.bonusMonths.includes(m)) plan.bonusMonths = plan.bonusMonths.filter(x => x !== m);
+      else plan.bonusMonths.push(m);
+      savePlan(); renderMonthGrid(); renderAll();
+    });
+  });
+}
+
+function buildSchedule() {
+  const schedule = [];
+  const yearTotals = [];
+  for (let y = 0; y < YEARS; y++) {
+    if (plan.overrides[y] !== undefined && plan.overrides[y] !== null && plan.overrides[y] !== '') {
+      const annual = parseFloat(plan.overrides[y]);
+      for (let m = 0; m < 12; m++) schedule.push(annual / 12);
+      yearTotals.push(annual);
+    } else {
+      const base = plan.monthlyBase * Math.pow(1 + plan.annualGrowth / 100, y);
+      const bonus = plan.bonusAmount * Math.pow(1 + plan.annualGrowth / 100, y);
+      let yearTotal = 0;
+      for (let m = 1; m <= 12; m++) {
+        const isBonus = plan.bonusMonths.includes(m);
+        const contrib = base + (isBonus ? bonus : 0);
+        schedule.push(contrib);
+        yearTotal += contrib;
+      }
+      yearTotals.push(yearTotal);
+    }
+  }
+  return { schedule, yearTotals };
+}
+
+function renderYearTable() {
+  const { yearTotals } = buildSchedule();
+  const tbody = document.getElementById('year-table-body');
+  tbody.innerHTML = yearTotals.map((total, y) => {
+    const age = START_AGE + y;
+    const hasOverride = plan.overrides[y] !== undefined && plan.overrides[y] !== null && plan.overrides[y] !== '';
+    return `<tr>
+      <td>${age}歳</td>
+      <td><input type="checkbox" class="override-toggle" data-y="${y}" ${hasOverride ? 'checked' : ''}></td>
+      <td>${hasOverride
+        ? `<input type="number" pattern="[0-9]*" inputmode="numeric" class="year-override-input select-all" data-y="${y}" value="${plan.overrides[y]}">`
+        : fmt(total)}</td>
+    </tr>`;
+  }).join('');
+
+  tbody.querySelectorAll('.override-toggle').forEach(cb => {
+    cb.addEventListener('change', (e) => {
+      const y = e.target.dataset.y;
+      if (e.target.checked) {
+        const { yearTotals } = buildSchedule();
+        plan.overrides[y] = Math.round(yearTotals[y]);
+      } else { delete plan.overrides[y]; }
+      savePlan(); renderYearTable(); renderAll();
+    });
+  });
+  tbody.querySelectorAll('.year-override-input').forEach(inp => {
+    inp.addEventListener('input', (e) => {
+      plan.overrides[e.target.dataset.y] = e.target.value;
+      savePlan(); renderAll();
+    });
+  });
+  setupInputHelpers();
+}
+
+document.getElementById('r-monthly').addEventListener('input', (e) => {
+  plan.monthlyBase = +e.target.value;
+  document.getElementById('v-monthly').textContent = plan.monthlyBase + '万円';
+  savePlan(); renderYearTable(); renderAll();
+});
+document.getElementById('r-growth').addEventListener('input', (e) => {
+  plan.annualGrowth = +e.target.value;
+  document.getElementById('v-growth').textContent = plan.annualGrowth.toFixed(1) + '%/年';
+  savePlan(); renderYearTable(); renderAll();
+});
+document.getElementById('r-bonus').addEventListener('input', (e) => {
+  plan.bonusAmount = +e.target.value;
+  document.getElementById('v-bonus').textContent = plan.bonusAmount + '万円';
+  savePlan(); renderYearTable(); renderAll();
+});
+
+/* ---------- SIMULATION ---------- */
+function simulateMonthly() {
+  const initial = holdings.reduce((s, h) => s + (h.amount || 0), 0);
+  const { schedule } = buildSchedule();
+  const avgReturn = calcAvgReturn();
+  const monthlyRate = Math.pow(1 + avgReturn / 100, 1 / 12) - 1;
+  
+  let asset = initial;
+  const trajectory = [{ idx: 0, age: START_AGE, asset, year: START_YM.y, month: START_YM.m }];
+  
+  let curY = START_YM.y;
+  let curM = START_YM.m;
+
+  schedule.forEach((contrib, i) => {
+    asset = asset * (1 + monthlyRate) + contrib;
+    curM++; if(curM > 12) { curM = 1; curY++; }
+    trajectory.push({ idx: i + 1, age: START_AGE + (i + 1) / 12, asset, year: curY, month: curM });
+  });
+  return trajectory;
+}
+
+function renderSimKPIs(trajectory) {
+  const initial = holdings.reduce((s, h) => s + (h.amount || 0), 0);
+  const final = trajectory[trajectory.length - 1].asset;
+  const { schedule } = buildSchedule();
+  const invested = schedule.reduce((s, c) => s + c, 0);
+  const gain = final - initial - invested;
+  const gap = final - 10000;
+
+  document.getElementById('kpi-final').textContent = fmt(final);
+  document.getElementById('kpi-invested').textContent = fmt(invested);
+  document.getElementById('kpi-gain').textContent = fmt(gain);
+  const gapEl = document.getElementById('kpi-gap');
+  gapEl.textContent = fmtDiff(gap);
+  gapEl.className = 'kpi-number ' + (gap >= 0 ? '' : 'danger');
+
+  const pct = Math.min(final / 10000 * 100, 100);
+  document.getElementById('gap-bar').style.width = pct + '%';
+  document.getElementById('gap-bar').className = 'gap-bar-fill' + (pct >= 100 ? ' over' : '');
+  document.getElementById('bar-label').textContent = pct.toFixed(1) + '% 達成';
+}
+
+function renderMainChart(trajectory) {
+  const step = 3; 
+  const points = trajectory.filter((_, i) => i % step === 0 || i === trajectory.length - 1);
+  const labels = points.map(p => p.age.toFixed(1) + '歳');
+  const data = points.map(p => Math.round(p.asset));
+  const goalLine = points.map(() => 10000);
+
+  if (mainChart) mainChart.destroy();
+  mainChart = new Chart(document.getElementById('chart'), {
+    type: 'line',
+    data: { labels, datasets: [
+      { label: '予測推移', data, borderColor: '#4f8ef7', backgroundColor: 'rgba(79,142,247,0.08)', fill: true, tension: 0.4, pointRadius: 0, borderWidth: 2 },
+      { label: '目標 1億円', data: goalLine, borderColor: '#34d399', borderDash: [6, 4], borderWidth: 1.5, pointRadius: 0, fill: false },
+    ]},
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: '#8892aa' } }, tooltip: { callbacks: { label: ctx => ' ' + fmt(ctx.raw) } } },
+      scales: {
+        x: { ticks: { color: '#8892aa', maxTicksLimit: 8 }, grid: { color: '#2a3050' } },
+        y: { ticks: { color: '#8892aa', callback: v => v >= 10000 ? (v / 10000).toFixed(1) + '億' : v / 10 + '千万' }, grid: { color: '#2a3050' } }
+      }
+    }
+  });
+}
+
+/* ---------- ACTUAL TRACKING & MOMENT GAP ---------- */
+function ymKey(y, m) { return `${y}-${String(m).padStart(2, '0')}`; }
+
+// 現時点（2026年6月）の想定ターゲットと、現実の実績との達成状況を計算して表示する
+function updateMomentStatus(trajectory) {
+  const currentKey = ymKey(NOW.getFullYear(), NOW.getMonth() + 1); // 2026-06 
+  
+  // 1. 理論上の現時点ターゲットを探す
+  const targetPoint = trajectory.find(p => ymKey(p.year, p.month) === currentKey) || trajectory[0];
+  const targetAsset = targetPoint.asset;
+
+  // 2. 直近の実績ログ、もしくは入力された最新の実績を探す
+  const keys = Object.keys(actuals).sort();
+  let latestActualAsset = holdings.reduce((s, h) => s + (h.amount || 0), 0); // 履歴がない場合は現在の入力合計
+  
+  if (keys.length > 0) {
+    const latestKey = keys[keys.length - 1];
+    latestActualAsset = actuals[latestKey].assetValue;
+  }
+
+  const gap = latestActualAsset - targetAsset;
+  const banner = document.getElementById('current-status-banner');
+  const gapValEl = document.getElementById('status-gap-val');
+  
+  document.getElementById('status-target-desc').textContent = `現時点の計画想定額: ${fmt(targetAsset)}`;
+  gapValEl.textContent = fmtDiff(gap);
+
+  if (gap >= 0) {
+    banner.className = "status-banner ahead";
+    gapValEl.className = "status-val ahead";
+  } else {
+    banner.className = "status-banner behind";
+    gapValEl.className = "status-val behind";
+  }
+}
+
+document.getElementById('save-actual').addEventListener('click', () => {
+  const monthVal = document.getElementById('input-month').value;
+  const assetVal = document.getElementById('input-asset').value;
+  const contribVal = document.getElementById('input-contrib').value;
+  if (!monthVal || assetVal === '') {
+    showToast('対象月と資産評価額は必須です'); return;
+  }
+  actuals[monthVal] = {
+    assetValue: parseFloat(assetVal) || 0,
+    contribution: contribVal === '' ? null : (parseFloat(contribVal) || 0),
+  };
+  saveActuals(); showToast('保存しました');
+  document.getElementById('input-asset').value = '';
+  document.getElementById('input-contrib').value = '';
+  renderActualLog(); renderActualChart();
+});
+
+function renderActualLog() {
+  const list = document.getElementById('log-list');
+  const keys = Object.keys(actuals).sort().reverse();
+  const trajectory = simulateMonthly();
+  
+  updateMomentStatus(trajectory); // 達成ステータスを更新
+
+  if (keys.length === 0) {
+    list.innerHTML = '<div class="empty-state">まだ実績記録がありません。</div>'; return;
+  }
+
+  list.innerHTML = keys.map(key => {
+    const [y, m] = key.split('-').map(Number);
+    const targetPoint = trajectory.find(p => p.year === y && p.month === m);
+    const target = targetPoint ? targetPoint.asset : null;
+    const a = actuals[key];
+    const diff = target !== null ? a.assetValue - target : null;
+    return `<div class="log-row">
+      <div class="log-month">${y}/${String(m).padStart(2,'0')}</div>
+      <div class="log-vals">
+        資産 ${fmt(a.assetValue)}
+        <div class="sub">${a.contribution !== null ? '積立 ' + fmt(a.contribution) : ''}</div>
+      </div>
+      ${diff !== null ? `<div class="log-diff ${diff >= 0 ? 'pos' : 'neg'}">${fmtDiff(diff)}</div>` : '<div class="log-diff">—</div>'}
+      <button class="log-del" data-key="${key}">×</button>
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('.log-del').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      delete actuals[e.target.dataset.key];
+      saveActuals(); renderActualLog(); renderActualChart();
+    });
+  });
+}
+
+function renderActualChart() {
+  const trajectory = simulateMonthly();
+  const step = 3;
+  const points = trajectory.filter((_, i) => i % step === 0 || i === trajectory.length - 1);
+  const labels = points.map(p => p.age.toFixed(1) + '歳');
+  const targetData = points.map(p => Math.round(p.asset));
+
+  const keys = Object.keys(actuals).sort();
+  const actualData = points.map(p => {
+    let best = null;
+    keys.forEach(key => {
+      const [y, m] = key.split('-').map(Number);
+      if (y < p.year || (y === p.year && m <= p.month)) {
+        best = actuals[key].assetValue;
+      }
+    });
+    return best;
+  });
+
+  if (actualChart) actualChart.destroy();
+  actualChart = new Chart(document.getElementById('actual-chart'), {
+    type: 'line',
+    data: { labels, datasets: [
+      { label: '計画目標ライン', data: targetData, borderColor: '#34d399', borderDash: [5, 4], borderWidth: 1.5, pointRadius: 0, fill: false },
+      { label: '現実実績', data: actualData, borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', fill: false, tension: 0.3, pointRadius: 3, borderWidth: 2, spanGaps: true },
+    ]},
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: '#8892aa' } }, tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${fmt(ctx.raw)}` } } },
+      scales: {
+        x: { ticks: { color: '#8892aa', maxTicksLimit: 8 }, grid: { color: '#2a3050' } },
+        y: { ticks: { color: '#8892aa', callback: v => v >= 10000 ? (v / 10000).toFixed(1) + '億' : v / 10 + '千万' }, grid: { color: '#2a3050' } }
+      }
+    }
+  });
+}
+
+/* ---------- TABS ---------- */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'sim') renderAll();
+    if (btn.dataset.tab === 'actual') { renderActualLog(); renderActualChart(); }
+  });
+});
+
+/* ---------- MASTER RENDER ---------- */
+function renderAll() {
+  const trajectory = simulateMonthly();
+  renderSimKPIs(trajectory);
+  renderMainChart(trajectory);
+}
+
+function init() {
+  loadAll();
+  
+  document.getElementById('r-monthly').value = plan.monthlyBase;
+  document.getElementById('v-monthly').textContent = plan.monthlyBase + '万円';
+  document.getElementById('r-growth').value = plan.annualGrowth;
+  document.getElementById('v-growth').textContent = plan.annualGrowth.toFixed(1) + '%/年';
+  document.getElementById('r-bonus').value = plan.bonusAmount;
+  document.getElementById('v-bonus').textContent = plan.bonusAmount + '万円';
+  document.getElementById('input-month').value = ymKey(START_YM.y, START_YM.m);
+
+  renderHoldings();
+  renderDonut();
+  renderMonthGrid();
+  renderYearTable();
+  renderAll();
+}
+
+init();
+</script>
+</body>
+</html>
